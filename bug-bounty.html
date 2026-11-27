@@ -676,7 +676,7 @@
                 <div class="tool-description">Find and verify subdomain takeovers</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="subdomain-takeover">subfinder -d {domain} -silent | httpx -silent -status-code -follow-host-redirects | tee takeover-candidates.txt</span>
+                    <span class="command" id="subdomain-takeover">subfinder -d {domain} -silent | httpx -silent | nuclei -t http/takeovers/ -rl 2 -o takeover-candidates.txt</span>
                 </div>
             </div>
 
@@ -899,7 +899,7 @@
                 <div class="tool-description">FFUF-based LFI vulnerability scanner</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="ffuf-lfi">ffuf -u 'https://{domain}/FUZZ' -w /path/to/wordlist.txt -mc 200,204,301,302,401,403 -rate 10 -of json -o content-discovery.json</span>
+                    <span class="command" id="ffuf-lfi">ffuf -u 'https://{domain}/FUZZ' -w /usr/share/seclists/Discovery/Web-Content/common.txt -mc 200,204,301,302,401,403 -rate 10 -of json -o content-discovery.json</span>
                 </div>
             </div>
         </div>
@@ -1007,7 +1007,7 @@
                 <div class="tool-description">Test for XSS/SSRF in headers</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="header-testing">echo 'Manual review only: inspect the application response to forwarded-host headers in an authorized test. Do not send collaborator callbacks through arbitrary headers.'</span>
+                    <span class="command" id="header-testing">curl -sS -D - -o /dev/null -H 'X-Forwarded-Host: example.org' 'https://{domain}/'</span>
                 </div>
             </div>
 
@@ -1259,7 +1259,7 @@
                 <div class="tool-description">Test GraphQL endpoints for introspection</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="graphql-introspection">curl -sS -X POST 'https://{domain}/graphql' -H 'Content-Type: application/json' --data '{"query":"{__typename}"}'</span>
+                    <span class="command" id="graphql-introspection">curl -sS -X POST 'https://{domain}/graphql' -H 'Content-Type: application/json' --data '{"query":"{ __schema { queryType { name } } }'}</span>
                 </div>
             </div>
 
@@ -1395,7 +1395,7 @@
                 <div class="tool-description">Advanced directory fuzzing</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="dir-fuzz">ffuf -u 'https://{domain}/FUZZ' -w /path/to/wordlist.txt -mc 200,204,301,302,401,403 -rate 10 -of json -o ffuf-results.json</span>
+                    <span class="command" id="dir-fuzz">ffuf -u 'https://{domain}/FUZZ' -w /usr/share/seclists/Discovery/Web-Content/common.txt -mc 200,204,301,302,401,403 -rate 10 -of json -o ffuf-results.json</span>
                 </div>
             </div>
 
@@ -2038,7 +2038,7 @@
                 <div class="tool-description">Search for vulnerable patterns</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="gf-patterns">cat dirsearch_results.txt | gf xss | tee gf_xss.txt && cat dirsearch_results.txt | gf ssrf | tee gf_ssrf.txt && cat dirsearch_results.txt | gf idor | tee gf_idor.txt</span>
+                    <span class="command" id="gf-patterns">cat urls.txt | gf xss | sort -u &gt; xss-candidates.txt</span>
                 </div>
             </div>
 
@@ -2068,7 +2068,7 @@
                 <div class="tool-description">Discover hidden parameters</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="param-discovery-workflow">cat katana_results.txt | unfurl format %s://%d%p | urldedupe -qs | tee params.txt</span>
+                    <span class="command" id="param-discovery-workflow">grep -E '\?.+=' katana_results.txt | sort -u &gt; parameterized-urls.txt</span>
                 </div>
             </div>
 

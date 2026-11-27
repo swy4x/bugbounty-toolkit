@@ -2219,10 +2219,10 @@
 
         function normalizeDomain(value) {
             let candidate = value.trim().toLowerCase();
-            if (/^https?:\\/\\//i.test(candidate)) {
+            if (/^https?:\/\//i.test(candidate)) {
                 try { candidate = new URL(candidate).hostname; } catch { return ''; }
             }
-            return candidate.replace(/\\.$/, '');
+            return candidate.replace(/\.$/, '');
         }
         function isValidDomain(domain) {
             if (!domain || domain.length > 253 || domain.includes('..')) return false;
@@ -2236,7 +2236,7 @@
             document.querySelectorAll('.command').forEach(cmd => {
                 const original = cmd.getAttribute('data-original') ?? cmd.textContent;
                 if (!cmd.hasAttribute('data-original')) cmd.setAttribute('data-original', original);
-                cmd.textContent = original.replace(/\\{domain\\}/g, domain);
+                cmd.textContent = original.replace(/\{domain\}/g, domain);
             });
         }
         function showNotification(message = 'Command copied to clipboard!') {

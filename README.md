@@ -1,28 +1,23 @@
-# swy4x Bug Bounty Toolkit
+# swy4x CyberSec Hub
 
-A work-in-progress collection of web security research utilities and command templates by **swy4x**.
+A browser-first cybersecurity workspace organized by discipline and dedicated tool pages.
 
-## Project files
+## Current structure
 
-- `index.html` — Advanced Bug Bounty Toolkit command hub.
-- `tools-hub.html` — Original multi-tool hub, rebranded from P1R4T3RX to swy4x.
+- `index.html` — Category-first CyberSec Hub explorer and browser tool workspaces.
+- `bug-bounty.html` — Preserved original Bug Bounty Toolkit page.
+- `tools-hub.html` — Original multi-tool hub retained as a legacy reference.
 
-## Status
+## Categories
 
-This repository is an early development baseline. Some command examples still need validation, dependency checks, safer input handling, and clearer output management. The toolkit currently displays/copies shell command templates; the HTML pages do not execute scans themselves.
+Bug Bounty & Web Security, Vulnerability Assessment, Network Security, OSINT & Intelligence, SOC & Blue Team, Malware Analysis, Digital Forensics, Security Auditing, Wireless Security, Cryptography & Passwords, Cloud & Infrastructure, API Security, Email Security, Mobile Security, Active Directory, Threat Intelligence & Incident Response, Reverse Engineering, and Learning & Cyber Labs.
 
-## Safe use
+## Implementation status
 
-Use only on domains and applications you own or have explicit written permission to test. Confirm the program's scope and rules before running any active testing commands. Do not run templates unchanged: review each command, replace placeholders, and understand its impact first.
+The homepage now provides category navigation, tool search, filters, dedicated tool workspaces, and initial browser-side utilities such as SHA-256 hashing, Base64, URL encoding/decoding, JWT decoding (without signature verification), password generation, IPv4 subnet calculation, IOC extraction, email-header parsing, browser information, and a finding-report template.
 
-## Roadmap
+Tools marked **Service required** need a real backend/provider integration before live lookups can run. Tools marked **In development** are not implemented yet. The interface intentionally does not fabricate scan results or claim unsupported functionality.
 
-- Move target input and **Generate Commands** to the top of the workflow.
-- Audit every command for correctness, usefulness, dependencies, and safe defaults.
-- Remove fake or unsupported tools and misleading functionality.
-- Generate commands from validated target and configuration inputs.
-- Improve reporting, error handling, accessibility, and responsive UI.
+## Safety
 
-## License
-
-See [LICENSE](LICENSE).
+Use active security testing only on systems you own or are explicitly authorized to assess. Treat automated findings as leads that require verification. Do not upload sensitive files or secrets unless the tool's data handling is clearly understood.

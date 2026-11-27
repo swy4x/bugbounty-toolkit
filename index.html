@@ -2365,8 +2365,8 @@
                 categories.forEach(heading => {
                     const group = heading.nextElementSibling;
                     const hasCards = group && [...group.querySelectorAll('.tool-card')].some(card => !card.hidden);
-                    heading.hidden = !hasCards;
-                    if (group) group.hidden = !hasCards;
+                    heading.style.display = hasCards ? '' : 'none';
+                    if (group) group.style.display = hasCards ? '' : 'none';
                 });
                 if (resultsCount) resultsCount.textContent = visible + ' of ' + allCards.length + ' command templates';
                 emptyState.style.display = visible ? 'none' : 'block';

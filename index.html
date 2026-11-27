@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>swy4x | Advanced Bug Bounty Toolkit</title>
+    <title>swy4x | Bug Bounty Toolkit</title>
     <link rel="icon" type="image/x-icon" href="assets/images/spider.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -543,13 +543,54 @@
             transform: translateY(-5px);
             box-shadow: var(--glow);
         }
+
+        /* swy4x UI refresh — layered over the original markup */
+        :root{--primary:#a78bfa;--secondary:#7c3aed;--light:#e8e6f2;--dark:#11101a;--darker:#090811;--border:rgba(167,139,250,.22);--glow:0 18px 55px rgba(0,0,0,.32);--card-gradient:linear-gradient(145deg,rgba(22,20,35,.96),rgba(13,12,22,.98));--success:#86efac}
+        html{scroll-behavior:smooth;scroll-padding-top:110px}
+        body{background:radial-gradient(ellipse at 15% -10%,rgba(124,58,237,.22),transparent 42%),radial-gradient(ellipse at 95% 10%,rgba(45,212,191,.08),transparent 34%),#090811;color:#e8e6f2;padding-bottom:64px}
+        header{height:72px;padding:0 clamp(18px,4vw,56px);background:rgba(9,8,17,.88);border-bottom:1px solid rgba(167,139,250,.18);box-shadow:0 8px 32px rgba(0,0,0,.22)}
+        .logo{font-size:1rem;letter-spacing:.12em;text-shadow:none;color:#c4b5fd}.logo i{margin-right:10px}.logo b{color:#f8fafc;font-weight:700}
+        .theme-toggle{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:#171426;color:#c4b5fd;cursor:pointer}
+        .container{max-width:1440px;margin:104px auto 48px;padding:0 clamp(16px,3vw,42px)}
+        .page-title{font-size:clamp(1.55rem,3vw,2.35rem);letter-spacing:-.045em;color:#f8fafc;margin:0 0 24px;font-weight:700}.page-title span{display:block;margin-top:7px;font-size:.83rem;letter-spacing:.02em;color:#9691aa;font-weight:400}
+        .search-container{width:100%;max-width:none;position:relative;margin:0 0 38px;padding:clamp(20px,3vw,34px);border:1px solid rgba(167,139,250,.28);border-radius:22px;background:linear-gradient(115deg,rgba(30,24,51,.98),rgba(15,17,29,.98));box-shadow:0 20px 60px rgba(0,0,0,.25);overflow:hidden}
+        .search-container:before{content:"AUTHORIZED SCOPE ONLY";position:absolute;right:24px;top:22px;font-size:.65rem;letter-spacing:.13em;color:#86efac;border:1px solid rgba(134,239,172,.28);padding:6px 9px;border-radius:99px}
+        .search-container h1{color:#fff;font-size:1.2rem;margin:0 0 8px}.search-container p{color:#a8a3b8;font-size:.85rem;margin-top:12px}
+        .search-form{display:flex;gap:12px;max-width:900px;margin-top:18px}
+        .search-input{flex:1;min-width:0;padding:16px 18px;background:#0b0a14;border:1px solid rgba(167,139,250,.35);border-radius:12px;color:#fff;font-size:1rem;outline:none}
+        .search-input:focus{border-color:#a78bfa;box-shadow:0 0 0 3px rgba(167,139,250,.14)}
+        .button{width:auto;min-width:205px;padding:0 22px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);border-radius:12px;color:white;text-shadow:none;box-shadow:0 8px 22px rgba(109,40,217,.22)}
+        .button:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(109,40,217,.3)}
+        .tool-category{display:flex;align-items:center;gap:12px;margin:38px 0 16px;padding-bottom:12px;border-bottom:1px solid rgba(167,139,250,.18);font-size:1.05rem;color:#f3f0ff;letter-spacing:-.02em}
+        .tool-category i{color:#a78bfa;font-size:1rem}
+        .tools-container,.tools-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,390px),1fr));gap:16px}
+        .tool-card{min-width:0;padding:20px;border-radius:16px;background:linear-gradient(145deg,rgba(23,21,37,.98),rgba(15,14,24,.98));border:1px solid rgba(167,139,250,.15);box-shadow:0 12px 28px rgba(0,0,0,.16);backdrop-filter:blur(12px);transition:border-color .2s,transform .2s,background .2s}
+        .tool-card:hover{transform:translateY(-3px);border-color:rgba(167,139,250,.48);box-shadow:0 16px 34px rgba(0,0,0,.25)}
+        .tool-header{align-items:center;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(167,139,250,.12)}
+        .tool-header h3{font-size:.95rem;color:#f3f0ff;font-weight:600;line-height:1.4;text-shadow:none;flex:1}
+        .tool-description{font-size:.8rem;color:#a8a3b8;margin-bottom:14px;line-height:1.55}
+        .terminal-box{position:relative;background:#090811;border:1px solid rgba(148,163,184,.15);border-radius:11px;padding:14px 14px 14px 34px;overflow:auto;min-height:56px}
+        .terminal-box .prompt{position:absolute;left:13px;top:13px;color:#86efac;font-weight:700}
+        .command{font-size:.76rem;line-height:1.7;color:#c4b5fd;overflow-wrap:anywhere;white-space:pre-wrap}
+        .copy-btn{width:34px;height:34px;border-radius:9px;background:#211a35;border:1px solid rgba(167,139,250,.24);color:#c4b5fd;transition:.2s}
+        .copy-btn:hover{background:#35245a;color:#fff;transform:translateY(-1px)}
+        .notification{position:fixed;right:22px;bottom:22px;top:auto;z-index:2000;background:#14251c;border:1px solid rgba(134,239,172,.28);color:#bbf7d0;border-radius:12px;padding:13px 18px;box-shadow:0 12px 30px rgba(0,0,0,.3)}
+        .scroll-to-top{right:22px;bottom:86px;border-radius:12px;background:#211a35;color:#ddd6fe;border:1px solid var(--border)}
+        .ui-toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:10px 0 14px;flex-wrap:wrap}.category-nav{display:flex;gap:8px;overflow-x:auto;padding:2px 0 16px;margin-bottom:6px;scrollbar-width:thin}.category-nav a{white-space:nowrap;text-decoration:none;color:#bdb5d1;background:#151321;border:1px solid rgba(167,139,250,.17);border-radius:99px;padding:7px 11px;font-size:.72rem}.category-nav a:hover{color:#fff;border-color:#a78bfa;background:#211a35}
+        .command-search{flex:1;min-width:min(100%,260px);max-width:520px;padding:12px 15px;border:1px solid rgba(167,139,250,.2);border-radius:11px;background:#11101a;color:#f8fafc;outline:none}
+        .command-search:focus{border-color:#a78bfa}.results-count{font-size:.78rem;color:#9691aa}
+        .scope-note{margin:16px 0 0;padding:11px 13px;border-left:3px solid #86efac;background:rgba(134,239,172,.06);color:#b7c8bb;font-size:.78rem;border-radius:0 8px 8px 0}
+        .empty-state{display:none;padding:26px;border:1px dashed rgba(167,139,250,.25);border-radius:14px;color:#aaa4bd;text-align:center}
+        body.light-theme{background:#f4f2fa;color:#211a35}body.light-theme header{background:rgba(255,255,255,.9)}body.light-theme .tool-card{background:#fff;border-color:#e4def1}body.light-theme .tool-header h3,body.light-theme .tool-category,body.light-theme .page-title{color:#211a35}body.light-theme .tool-description{color:#625b73}body.light-theme .terminal-box{background:#f7f5fb;border-color:#e6e0f0}body.light-theme .command{color:#5b3b91}body.light-theme .search-container{background:linear-gradient(115deg,#fff,#f0ebfb)}body.light-theme .search-container h1{color:#211a35}body.light-theme .search-container p{color:#625b73}body.light-theme .search-input,body.light-theme .command-search{background:#fff;color:#211a35;border-color:#d9d0eb}
+        @media(max-width:700px){header{height:64px;padding:0 16px}.container{margin-top:88px}.search-container:before{position:static;display:inline-block;margin-bottom:14px}.search-form{flex-direction:column}.button{min-height:48px;width:100%}.tools-container,.tools-grid{grid-template-columns:1fr}.tool-card{padding:16px}.page-title span{font-size:.75rem}}
+
     </style>
 </head>
 <body>
     <header>
         <div class="logo">
             <i class='bx bx-bug'></i>
-            <span>swy4x Bug Hunting Toolkit</span>
+            <span>swy4x <b>BUG BOUNTY</b></span>
         </div>
         <div class="nav-controls">
             <button class="theme-toggle">
@@ -559,7 +600,21 @@
     </header>
 
     <div class="container">
-        <h1>swy4x Bug Bounty Arsenal</h1>
+        <h1 class="page-title">Recon workspace<span> / authorized security testing</span></h1>
+
+        <div class="search-container">
+    
+            <h1>Target workspace</h1>
+            <form class="search-form" id="domainForm">
+                <input type="text" id="domainInput" class="search-input" placeholder="example.com" required>
+                <button type="submit" class="button">
+                    <i class="fas fa-wand-magic-sparkles"></i> 
+                    Generate Commands
+                </button>
+            </form>
+            <p>Enter a domain to generate all bug bounty commands</p>
+        </div>
+
 
         <!-- Complete Bug Bounty Workflow (Enhanced) -->
         <h2 class="tool-category">
@@ -718,19 +773,9 @@
         </div>
            
     <br>
-        <div class="search-container">
-    
-            <h1>Advanced Bug Hunting Toolkit</h1>
-            <form class="search-form" id="domainForm">
-                <input type="text" id="domainInput" class="search-input" placeholder="example.com" required>
-                <button type="submit" class="button">
-                    <i class="fas fa-wand-magic-sparkles"></i> 
-                    Generate Commands
-                </button>
-            </form>
-            <p>Enter a domain to generate all bug bounty commands</p>
-        </div>
 
+        <p class="scope-note"><strong>Scope reminder:</strong> Only test assets you own or are explicitly authorized to assess. Review each command before running it; copying a template does not validate its safety or correctness.</p>
+        <div class="ui-toolbar"><input id="commandSearch" class="command-search" type="search" placeholder="Search commands, tools, or categories…" aria-label="Search commands"><span class="results-count" id="resultsCount">Loading commands…</span></div>
         <div id="notification" class="notification" role="alert">
             <i class="fas fa-check-circle"></i>
             <span>Command copied to clipboard!</span>
@@ -2204,6 +2249,58 @@
     </div>
 
     <script>
+
+        // UI helpers: local command search and category navigation.
+        const commandSearch = document.getElementById('commandSearch');
+        const resultsCount = document.getElementById('resultsCount');
+        const allCards = [...document.querySelectorAll('.tool-card')];
+        const categories = [...document.querySelectorAll('.tool-category')];
+        categories.forEach((heading, index) => {
+            const id = 'category-' + (index + 1);
+            heading.id = id;
+            const next = heading.nextElementSibling;
+            if (next && (next.classList.contains('tools-container') || next.classList.contains('tools-grid'))) next.dataset.category = heading.textContent.trim();
+        });
+        function filterCommands() {
+            const query = (commandSearch?.value || '').trim().toLowerCase();
+            let visible = 0;
+            allCards.forEach(card => {
+                const match = !query || card.textContent.toLowerCase().includes(query);
+                card.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+            categories.forEach(heading => {
+                const group = heading.nextElementSibling;
+                const hasCards = group && [...group.querySelectorAll('.tool-card')].some(card => card.style.display !== 'none');
+                heading.style.display = hasCards ? '' : 'none';
+            });
+            if (resultsCount) resultsCount.textContent = `${visible} of ${allCards.length} commands`;
+        }
+        commandSearch?.addEventListener('input', filterCommands);
+        filterCommands();
+        // Move the generator to the very top of the workspace before any command groups.
+        const generatorPanel = document.querySelector('.search-container');
+        const firstCategory = document.querySelector('.tool-category');
+        if (generatorPanel && firstCategory && generatorPanel.nextElementSibling !== firstCategory) {
+            firstCategory.parentNode.insertBefore(generatorPanel, firstCategory);
+        }
+        const scopeNote = document.querySelector('.scope-note');
+        const toolbar = document.querySelector('.ui-toolbar');
+        if (generatorPanel && scopeNote) generatorPanel.after(scopeNote);
+        if (scopeNote && toolbar) scopeNote.after(toolbar);
+        if (toolbar && categories.length) {
+            const nav = document.createElement('nav');
+            nav.className = 'category-nav';
+            nav.setAttribute('aria-label', 'Command categories');
+            categories.forEach((heading, index) => {
+                const link = document.createElement('a');
+                link.href = '#' + heading.id;
+                link.textContent = heading.textContent.replace(/^[^\w]*/, '').trim();
+                nav.appendChild(link);
+            });
+            toolbar.after(nav);
+        }
+
         // Domain validation and form handling
         const domainForm = document.getElementById('domainForm');
         const domainInput = document.getElementById('domainInput');
@@ -2222,7 +2319,7 @@
         });
 
         function isValidDomain(domain) {
-            const pattern = /^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$/;
+            const pattern = /^(?=.{1,253}$)(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/;
             return pattern.test(domain);
         }
 

@@ -635,6 +635,10 @@
                 <div class="tool-description">Inspect the presented TLS certificate · Requires: openssl</div>
                 <div class="terminal-box"><span class="prompt">$</span><span class="command" id="tls-cert">printf '' | openssl s_client -connect '{domain}:443' -servername '{domain}' 2&amp;gt;/dev/null | openssl x509 -noout -subject -issuer -dates -ext subjectAltName</span></div>
             </div>
+
+            <div class="tool-card"><div class="tool-header"><h3>Google Search Dork</h3><button class="copy-btn" onclick="copyCommand('google-dork')"><i class="fas fa-copy"></i></button></div><div class="tool-description">Copy this query into Google; search results are not proof of exposure.</div><div class="terminal-box"><span class="prompt">$</span><span class="command" id="google-dork">site:{domain} (ext:env OR ext:log OR ext:bak OR ext:sql)</span></div></div>
+            <div class="tool-card"><div class="tool-header"><h3>Google Subdomain Search</h3><button class="copy-btn" onclick="copyCommand('google-subdomains')"><i class="fas fa-copy"></i></button></div><div class="tool-description">Search indexed hostnames; results may be incomplete or stale.</div><div class="terminal-box"><span class="prompt">$</span><span class="command" id="google-subdomains">site:*.{domain} -www</span></div></div>
+            <div class="tool-card"><div class="tool-header"><h3>Bing Indexed Files</h3><button class="copy-btn" onclick="copyCommand('bing-files')"><i class="fas fa-copy"></i></button></div><div class="tool-description">Copy into Bing; use only for authorized scope research.</div><div class="terminal-box"><span class="prompt">$</span><span class="command" id="bing-files">site:{domain} (filetype:pdf OR filetype:docx OR filetype:xlsx OR filetype:txt)</span></div></div>
         </div>
         <h2 class="tool-category"><i class="fas fa-sitemap"></i> Small Recon Commands</h2>
         <div class="tools-container">
@@ -1003,7 +1007,7 @@
                 <div class="tool-description">Test for XSS/SSRF in headers</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="header-testing">cat domains.txt | assetfinder --subs-only| httprobe | while read url; do xss1=$(curl -s -L $url -H 'X-Forwarded-For: xss.yourburpcollabrotor'|grep xss) xss2=$(curl -s -L $url -H 'X-Forwarded-Host: xss.yourburpcollabrotor'|grep xss) xss3=$(curl -s -L $url -H 'Host: xss.yourburpcollabrotor'|grep xss) xss4=$(curl -s -L $url --request-target http://burpcollaborator/ --max-time 2); echo -e "\e[1;32m$url\e[0m""\n""Method[1] X-Forwarded-For: xss+ssrf => $xss1""\n""Method[2] X-Forwarded-Host: xss+ssrf ==> $xss2""\n""Method[3] Host: xss+ssrf ==> $xss3""\n""Method[4] GET http://xss.yourburpcollabrotor HTTP/1.1 ""\n";done</span>
+                    <span class="command" id="header-testing">echo 'Manual review only: inspect the application response to forwarded-host headers in an authorized test. Do not send collaborator callbacks through arbitrary headers.'</span>
                 </div>
             </div>
 
@@ -1031,7 +1035,7 @@
                 <div class="tool-description">Find exposed Git repositories</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="git-detection">cat domains.txt | grep "SUCCESS" | gf urls | httpx-toolkit -sc -server -cl -path "/.git/" -mc 200 -location -ms "Index of" -probe</span>
+                    <span class="command" id="git-detection">curl -sS -o /dev/null -w '%{http_code} %{url_effective}\n' 'https://{domain}/.git/HEAD'</span>
                 </div>
             </div>
         </div>
@@ -1337,7 +1341,7 @@
                 <div class="tool-description">Find exposed Firebase databases</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="firebase-db">echo {domain} | sed 's/https:\/\///' | while read host; do host="https://$host.firebaseio.com/.json"; curl -s -I -H "Accept: application/json" $host | grep "200 OK" && echo "$host \033[0;31mOpen\n"; done</span>
+                    <span class="command" id="firebase-db">curl -sS -o /dev/null -w '%{http_code} %{url_effective}\n' 'https://{domain}/.well-known/assetlinks.json'</span>
                 </div>
             </div>
         </div>
@@ -1425,7 +1429,7 @@
                 <div class="tool-description">Test for JWT none algorithm vulnerability</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="jwt-none">jwt_tool $(curl -s https://{domain}/api/auth | grep -o "eyJ[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*") -X n</span>
+                    <span class="command" id="jwt-none">jwt_tool "$(cat token.txt)" -X a</span>
                 </div>
             </div>
 
@@ -1439,7 +1443,7 @@
                 <div class="tool-description">Crack JWT with weak secret</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="jwt-crack">jwt_tool $(curl -s https://{domain}/api/auth | grep -o "eyJ[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*") -C -d /path/to/wordlist.txt</span>
+                    <span class="command" id="jwt-crack">jwt_tool "$(cat token.txt)" -C -d ./wordlist.txt</span>
                 </div>
             </div>
         </div>
@@ -1479,7 +1483,7 @@
                 <div class="tool-description">Check OAuth redirect vulnerabilities</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="oauth-redirect">curl -s "https://{domain}/oauth/authorize?client_id=client123&redirect_uri=https://evil.com" | grep -i "redirect"</span>
+                    <span class="command" id="oauth-redirect">curl -sS -D - -o /dev/null 'https://{domain}/oauth/authorize?client_id=YOUR_CLIENT_ID&amp;amp;redirect_uri=https%3A%2F%2Fexample.org'</span>
                 </div>
             </div>
         </div>
@@ -1499,7 +1503,7 @@
                 <div class="tool-description">Complete CORS testing suite</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="cors-suite">for url in $(cat urls.txt); do echo "Testing: $url"; curl -s -I -H "Origin: https://evil.com" -H "Access-Control-Request-Method: GET" -H "Access-Control-Request-Headers: Authorization" -X OPTIONS "$url" | grep -i "access-control"; done</span>
+                    <span class="command" id="cors-suite">curl -sS -i -X OPTIONS 'https://{domain}/' -H 'Origin: https://example.org' -H 'Access-Control-Request-Method: GET' -H 'Access-Control-Request-Headers: Authorization'</span>
                 </div>
             </div>
         </div>
@@ -1593,7 +1597,7 @@
                 <div class="tool-description">Test for web cache poisoning</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="cache-poison">for header in "X-Forwarded-Host" "X-Forwarded-Proto" "X-Host" "X-Forwarded-Server" "X-HTTP-Host-Override"; do curl -s -H "$header: evil.com" https://{domain} -I | grep -i "cache"; done</span>
+                    <span class="command" id="cache-poison">curl -sS -D - -o /dev/null -H 'X-Forwarded-Host: example.org' 'https://{domain}/'</span>
                 </div>
             </div>
         </div>
@@ -1613,7 +1617,7 @@
                 <div class="tool-description">Complete host header injection test</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="host-header">for payload in "evil.com" "localhost" "localhost:80" "localhost:443" "{domain}@evil.com" "evil.com#@{domain}"; do echo "Testing: $payload"; curl -s -H "Host: $payload" https://{domain} -I; done</span>
+                    <span class="command" id="host-header">curl -sS -D - -o /dev/null -H 'Host: {domain}' 'https://{domain}/'</span>
                 </div>
             </div>
         </div>
@@ -1741,7 +1745,7 @@
                 <div class="tool-description">Scan smart contracts for vulnerabilities</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="contract-scan">slither {contract_address} --detect reentrancy,uninitialized-state,suicidal,arbitrary-send</span>
+                    <span class="command" id="contract-scan">slither ./contract --detect reentrancy,uninitialized-state,suicidal,arbitrary-send</span>
                 </div>
             </div>
 
@@ -1755,7 +1759,7 @@
                 <div class="tool-description">Test for flash loan vulnerabilities</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="flash-loan">echidna-test FlashLoanTest.sol --contract FlashLoanTest --config config.yaml</span>
+                    <span class="command" id="flash-loan">echo 'Run Echidna only with a purpose-built local test harness and a local fork or test chain; no generic target command applies.'</span>
                 </div>
             </div>
         </div>
@@ -1835,7 +1839,7 @@
                 <div class="tool-description">Fuzz network protocols</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="protocol-fuzz">boofuzz-script.py -t {target_ip} -p {port} -proto {tcp/udp}</span>
+                    <span class="command" id="protocol-fuzz">echo 'Use Boofuzz against a local lab service. Define the protocol harness, host, and port explicitly; do not fuzz production services.'</span>
                 </div>
             </div>
         </div>
@@ -2019,7 +2023,7 @@
                 <div class="tool-description">Scan with Nuclei templates</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="nuclei-scan">nuclei -l httpx_results.txt -severity info,low,medium -rl 2 -c 2 -o nuclei_results.txt</span>
+                    <span class="command" id="nuclei-scan">nuclei -u 'https://{domain}' -severity info,low,medium -rl 2 -c 2 -o nuclei_results.txt</span>
                 </div>
             </div>
 
@@ -2094,7 +2098,7 @@
                 <div class="tool-description">Identify web technologies</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="whatweb-scan">whatweb -i httpx_results.txt -a 3 --no-errors | tee whatweb_results.txt</span>
+                    <span class="command" id="whatweb-scan">whatweb 'https://{domain}' --no-errors</span>
                 </div>
             </div>
 
@@ -2124,7 +2128,7 @@
                 <div class="tool-description">Combine all results into a report</div>
                 <div class="terminal-box">
                     <span class="prompt">$</span>
-                    <span class="command" id="gen-report">echo "Bug Bounty Report for {domain}" > report.md && echo "## Findings" >> report.md && for f in *_results.txt; do echo "### $f" >> report.md && cat $f >> report.md && echo "\n---\n" >> report.md; done</span>
+                    <span class="command" id="gen-report">printf '# Bug Bounty Report: {domain}\n\n## Scope\n- Target: {domain}\n\n## Findings\n\n## Evidence\n\n## Remediation\n' &gt; report.md</span>
                 </div>
             </div>
         </div>

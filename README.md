@@ -5,7 +5,7 @@ A browser-first cybersecurity workspace organized by discipline and dedicated to
 ## Current structure
 
 - `index.html` — Category-first CyberSec Hub explorer and browser tool workspaces.
-- `bug-bounty.html` — Preserved original Bug Bounty Toolkit page.
+- `bug-bounty.html` — Guided bug-bounty workspace with target-aware command generation, hunting objectives, investigation guidance, payload references, and reporting checklist.
 - `tools-hub.html` — Original multi-tool hub retained as a legacy reference.
 
 ## Categories
@@ -14,7 +14,7 @@ Bug Bounty & Web Security, Vulnerability Assessment, Network Security, OSINT & I
 
 ## Implementation status
 
-The homepage now provides category navigation, tool search, filters, dedicated tool workspaces, and initial browser-side utilities such as SHA-256 hashing, Base64, URL encoding/decoding, JWT decoding (without signature verification), password generation, IPv4 subnet calculation, IOC extraction, email-header parsing, browser information, and a finding-report template.
+The homepage provides category navigation, tool search, filters, dedicated tool workspaces, and browser-side utilities. The Bug Bounty Toolkit opens a dedicated workflow builder that generates commands for selected authorized testing objectives, explains investigation steps, and includes a payload reference and evidence checklist. It generates commands only; it does not execute scans.
 
 Tools marked **Service required** need a real backend/provider integration before live lookups can run. Tools marked **In development** are not implemented yet. The interface intentionally does not fabricate scan results or claim unsupported functionality.
 

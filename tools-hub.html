@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>swy4x Tools Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #9D00FF;
+            --primary-dark: #0a0014;
+            --primary-darker: #050008;
+            --primary-light: #B23AEE;
+            --accent: #FF00FF;
+            --accent-dark: #8B008B;
+            --text-light: #fff;
+            --text-dark: #0a0014;
+            --text-muted: #b794f6;
+            --gradient-primary: linear-gradient(135deg, #9D00FF, #4B0082);
+            --gradient-dark: linear-gradient(135deg, #0a0014 0%, #1a0033 100%);
+            --gradient-glow: linear-gradient(45deg, var(--primary) 0%, var(--accent) 100%);
+            --shadow-neon: 0 0 15px rgba(157, 0, 255, 0.5);
+            --neon-border: 1px solid rgba(157, 0, 255, 0.3);
+        }
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        body {
+            background: var(--primary-darker);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--primary-dark);
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            border-bottom: var(--neon-border);
+            box-shadow: var(--shadow-neon);
+        }
+
+        .glitch {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--primary);
+            position: relative;
+        }
+
+        /* Search Container */
+        .search-container {
+            position: relative;
+            width: 400px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 12px 45px 12px 20px;
+            background: rgba(10, 0, 20, 0.8);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-container input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(157, 0, 255, 0.4);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            animation: searchPulse 2s infinite alternate;
+        }
+
+        @keyframes searchPulse {
+            from { transform: translateY(-50%) scale(1); }
+            to { transform: translateY(-50%) scale(1.2); }
+        }
+
+        /* User Profile */
+        .user-profile {
+            display: none;
+        }
+
+        /* Layout Container */
+        .layout-container {
+            display: flex;
+            height: calc(100vh - 80px);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 300px;
+            background: var(--primary-dark);
+            border-right: var(--neon-border);
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        /* World Map Container */
+        .world-map-container {
+            background: var(--primary-darker);
+            border: var(--neon-border);
+            border-radius: 15px;
+            padding: 2rem;
+            height: calc(100vh - 140px);
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+        }
+
+        .world-map {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+                url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5NjAgNDgwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9InJnYmEoMTU3LCAwLCAyNTUsIDAuMykiIGQ9Ik00ODAgMjQwQzIxNC45IDI0MCAwIDI0MCAwIDI0MHMyMTQuOS0yNDAgNDgwLTI0MGMyNjUuMSAwIDQ4MCAyNDAgNDgwIDI0MHMtMjE0LjkgMjQwLTQ4MCAyNDB6bTAtNDgwYy0yNjUuMSAwLTQ4MCAyNDAtNDgwIDI0MHMyMTQuOSAyNDAgNDgwIDI0MGMyNjUuMSAwIDQ4MC0yNDAgNDgwLTI0MHMtMjE0LjktMjQwLTQ4MC0yNDB6Ii8+PC9zdmc+');
+            background-size: cover;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .map-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(90deg, rgba(157, 0, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(157, 0, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+        }
+
+        .attack-stats {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(10, 0, 20, 0.8);
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            padding: 15px;
+            color: var(--text-light);
+        }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stat-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(157, 0, 255, 0.2);
+            border-radius: 50%;
+            font-size: 1.2rem;
+        }
+
+        .attack-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .attack-point::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 1.5s infinite;
+        }
+
+        .attack-beam {
+            position: absolute;
+            height: 2px;
+            transform-origin: left center;
+            animation: beamAttack 1.5s ease-out forwards;
+            filter: drop-shadow(0 0 5px var(--accent));
+            z-index: 2;
+        }
+
+        .attack-impact {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        .impact-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: impactRing 1s ease-out forwards;
+        }
+
+        @keyframes impactRing {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+
+        .attack-type {
+            position: absolute;
+            background: rgba(10, 0, 20, 0.9);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            transform: translate(-50%, -150%);
+            white-space: nowrap;
+        }
+
+        .attack-points, .attack-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .attack-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .attack-list {
+            flex: 1;
+            background: rgba(5, 0, 10, 0.5);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .attack-list-header {
+            padding: 1rem;
+            background: var(--primary-dark);
+            color: var(--text-light);
+            font-weight: 600;
+            border-bottom: 1px solid var(--primary);
+        }
+
+        .attack-list-content {
+            height: calc(100% - 50px);
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .attack-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            border-bottom: 1px solid rgba(157, 0, 255, 0.1);
+            animation: slideIn 0.3s ease;
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Tool Categories */
+        .tool-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .category-header:hover {
+            background: rgba(157, 0, 255, 0.1);
+        }
+
+        .category-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .toggle-icon {
+            color: var(--primary);
+            transition: transform 0.3s ease;
+        }
+
+        .category-content {
+            display: none;
+            padding-left: 1rem;
+        }
+
+        .category-content.active {
+            display: block;
+        }
+
+        /* Tool Groups */
+        .tool-group {
+            margin-bottom: 1rem;
+        }
+
+        .group-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .group-name:hover {
+            color: var(--text-light);
+            background: rgba(157, 0, 255, 0.1);
+        }
+
+        .group-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        /* Tool Items */
+        .tool-list {
+            display: none;
+            padding-left: 2rem;
+        }
+
+        .tool-list.active {
+            display: block;
+        }
+
+        .tool-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-light);
+        }
+
+        .tool-item:hover {
+            background: rgba(157, 0, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .tool-icon {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(157, 0, 255, 0.1);
+            border-radius: 5px;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .tool-name {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* Auth Corner Styles */
+        .auth-corner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .auth-corner:hover {
+            opacity: 1;
+        }
+
+        .auth-button {
+            padding: 8px 15px;
+            background: var(--primary-dark);
+            color: var(--text-light);
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .auth-button:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        @keyframes beamAttack {
+            0% { transform: scaleX(0); opacity: 1; }
+            100% { transform: scaleX(1); opacity: 0; }
+        }
+
+        /* Country styles */
+        .country-marker {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .country-marker::before {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background: rgba(157, 0, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 2s infinite;
+        }
+
+        .country-label {
+            position: absolute;
+            left: 12px;
+            top: -8px;
+            font-size: 0.7rem;
+            color: var(--text-light);
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .country-marker:hover .country-label {
+            opacity: 1;
+        }
+
+        .country-tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(10, 0, 20, 0.9);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            padding: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+
+        .tooltip-header {
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .tooltip-stat {
+            color: var(--text-light);
+            font-size: 0.7rem;
+        }
+
+        .attack-info {
+            position: absolute;
+            background: rgba(10, 0, 20, 0.9);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            color: var(--text-light);
+            transform: translate(-50%, -150%);
+            white-space: nowrap;
+            z-index: 3;
+        }
+
+        .attack-severity {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+
+        .attack-severity.critical {
+            background: #ff0000;
+            color: white;
+        }
+
+        .attack-severity.high {
+            background: #ff6600;
+            color: white;
+        }
+
+        .attack-severity.medium {
+            background: #ffcc00;
+            color: black;
+        }
+
+        .attack-list-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-bottom: 1px solid rgba(157, 0, 255, 0.2);
+            animation: slideIn 0.3s ease;
+        }
+
+        .attack-list-severity {
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .attack-list-details {
+            flex: 1;
+        }
+
+        .attack-list-type {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .attack-list-countries {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        .attack-list-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            z-index: 10000;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 4.7s;
+        }
+
+        .notification.info {
+            background: var(--primary);
+        }
+
+        .notification.error {
+            background: #ff5555;
+        }
+
+        .notification.success {
+            background: #50fa7b;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* Command Hub Styles */
+        .command-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .command-content {
+            background: var(--primary-dark);
+            border: 1px solid var(--primary);
+            border-radius: 10px;
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .command-categories {
+            margin: 2rem 0;
+        }
+
+        .command-category {
+            margin-bottom: 2rem;
+        }
+
+        .command-category h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .command-box {
+            background: rgba(10, 0, 20, 0.8);
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            padding: 1rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .command-box h4 {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .command-box pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary);
+            color: var(--text-light);
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .close-btn {
+            background: var(--primary);
+            color: var(--text-light);
+            border: none;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="glitch" data-text="swy4x">swy4x</h1>
+        <div class="search-container">
+            <input type="search" placeholder="Search tools, categories..." id="searchInput">
+            <span class="search-icon">🔍</span>
+        </div>
+    </header>
+
+    <div class="layout-container">
+        <div class="sidebar">
+            <!-- Will be populated by JavaScript -->
+        </div>
+
+        <div class="main-content">
+            <div class="world-map-container">
+                <div class="world-map">
+                    <div class="map-grid"></div>
+                    <div class="attack-points"></div>
+                    <div class="attack-lines"></div>
+                    <div class="attack-stats">
+                        <div class="stat-row">
+                            <div class="stat-icon">🎯</div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="totalAttacks">0</div>
+                                <div class="stat-label">Total Attacks</div>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-icon">⚡</div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="attacksPerSecond">0</div>
+                                <div class="stat-label">Attacks/Second</div>
+                            </div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-icon">🛡️</div>
+                            <div class="stat-info">
+                                <div class="stat-value" id="blockedAttacks">0</div>
+                                <div class="stat-label">Attacks Blocked</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="attack-list">
+                    <div class="attack-list-header">Live Attacks</div>
+                    <div class="attack-list-content" id="attackList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Corner -->
+    <div class="auth-corner">
+        <button class="auth-button" onclick="showLoginModal()">Login</button>
+        <button class="auth-button" onclick="showSignupModal()">Sign Up</button>
+    </div>
+
+    <script>
+        // Tool Data Structure
+        const toolData = {
+            whoAmI: {
+                name: "Who Am I - swy4x",
+                groups: {
+                    "Profile": [
+                        {
+                            name: "View Profile",
+                            command: "Opening Profile Page",
+                            description: "Learn about the security researcher behind these tools",
+                            redirect: "frontend/pages/whoami.html"
+                        }
+                    ]
+                }
+            },
+            tempMail: {
+                name: "Temporary Email Tools",
+                groups: {
+                    "Disposable Email": [
+                        {
+                            name: "10 Minute Mail",
+                            command: "Opening 10 Minute Mail Service",
+                            description: "Create temporary email that lasts for 10 minutes",
+                            redirect: "/temp-mail/10min"
+                        },
+                        {
+                            name: "Temp Mail Generator",
+                            command: "Opening Temp Mail Generator",
+                            description: "Generate unlimited temporary email addresses",
+                            redirect: "/temp-mail/generator"
+                        },
+                        {
+                            name: "Fake Address Creator",
+                            command: "Opening Fake Address Creator",
+                            description: "Create temporary shipping and billing addresses",
+                            redirect: "/temp-mail/address"
+                        },
+                        {
+                            name: "Burner Email",
+                            command: "Opening Burner Email Service",
+                            description: "Create disposable email addresses",
+                            redirect: "/temp-mail/burner"
+                        }
+                    ],
+                    "Email Management": [
+                        {
+                            name: "Email Forwarder",
+                            command: "Opening Email Forwarding Service",
+                            description: "Forward emails from temporary to permanent address",
+                            redirect: "/temp-mail/forward"
+                        },
+                        {
+                            name: "Email Alias Creator",
+                            command: "Opening Email Alias Creator",
+                            description: "Create email aliases for privacy",
+                            redirect: "/temp-mail/alias"
+                        }
+                    ]
+                }
+            },
+            bugBounty: {
+                name: "Bug Bounty Commands",
+                groups: {
+                    "One-Shot Commands": [
+                        {
+                            name: "Bug Bounty Command Hub",
+                            command: "View All Commands",
+                            description: "Access all bug bounty hunting commands",
+                            isCommandHub: true
+                        }
+                    ]
+                }
+            },
+            webInfoGatherer: {
+                name: "Web Info Gatherer",
+                groups: {
+                    "OSINT Tools": [
+                        {
+                            name: "Email Harvester",
+                            command: "theHarvester -d target.com -b all",
+                            description: "Gather emails from various sources"
+                        },
+                        {
+                            name: "Social Media Scanner",
+                            command: "social_scanner -t target.com",
+                            description: "Find social media presence"
+                        }
+                    ],
+                    "Infrastructure Analysis": [
+                        {
+                            name: "Cloud Resources Scanner",
+                            command: "cloud_enum -d target.com",
+                            description: "Enumerate cloud resources"
+                        },
+                        {
+                            name: "WAF Fingerprinter",
+                            command: "wafw00f target.com",
+                            description: "Identify WAF protection"
+                        }
+                    ]
+                }
+            },
+            scamFraud: {
+                name: "Scam & Fraud Detection",
+                groups: {
+                    "Phishing Detection": [
+                        "URL Phishing Scanner",
+                        "Email Scam Analyzer",
+                        "Domain Reputation Checker",
+                        "SSL Certificate Validator",
+                        "Phishing Page Detector",
+                        "Social Engineering Analyzer",
+                        "Fake Login Page Scanner",
+                        "Scam URL Database",
+                        "Phishing Kit Detector",
+                        "Brand Impersonation Checker"
+                    ],
+                    "Fraud Analytics": [
+                        "Transaction Anomaly Detector",
+                        "Payment Fraud Scanner",
+                        "Identity Theft Monitor",
+                        "Account Takeover Detector",
+                        "Behavioral Fraud Analysis",
+                        "Financial Fraud Scanner",
+                        "Chargeback Predictor",
+                        "KYC Verification Tool",
+                        "Document Forgery Detector",
+                        "Money Laundering Scanner"
+                    ],
+                    "Social Media Security": [
+                        "Profile Authenticity Checker",
+                        "Bot Account Detector",
+                        "Fake Follower Analyzer",
+                        "Social Media Monitor",
+                        "Impersonation Alert System",
+                        "Comment Spam Detector",
+                        "Social Engineering Guard",
+                        "Account Security Audit",
+                        "Privacy Leak Scanner",
+                        "Reputation Monitor"
+                    ]
+                }
+            },
+            networkSecurity: {
+                name: "Network Security",
+                groups: {
+                    "Network Analysis": [
+                        {
+                            name: "Port Scanner",
+                            command: "nmap -sV -p- target.com",
+                            description: "Full port scan with service detection"
+                        },
+                        {
+                            name: "Traffic Monitor",
+                            command: "tcpdump -i any host target.com",
+                            description: "Monitor network traffic"
+                        }
+                    ],
+                    "Wireless Security": [
+                        {
+                            name: "WiFi Security Scanner",
+                            command: "aircrack-ng capture.cap",
+                            description: "Analyze wireless security"
+                        }
+                    ]
+                }
+            },
+            malwareAnalysis: {
+                name: "Malware Analysis",
+                groups: {
+                    "Static Analysis": [
+                        {
+                            name: "File Hash Checker",
+                            command: "sha256sum malware.bin",
+                            description: "Generate file hashes"
+                        },
+                        {
+                            name: "String Extractor",
+                            command: "strings -a malware.bin",
+                            description: "Extract readable strings"
+                        }
+                    ],
+                    "Dynamic Analysis": [
+                        {
+                            name: "Behavior Monitor",
+                            command: "procmon -b malware.exe",
+                            description: "Monitor process behavior"
+                        }
+                    ]
+                }
+            },
+            webSecurity: {
+                name: "Web Security",
+                groups: {
+                    "Web Scanner": [
+                        "Vulnerability Scanner",
+                        "SQL Injection Tester",
+                        "XSS Detector",
+                        "CSRF Tester",
+                        "Directory Scanner",
+                        "Web Shell Detector",
+                        "CMS Security Check",
+                        "SSL/TLS Scanner",
+                        "HTTP Header Analyzer",
+                        "Cookie Security Check"
+                    ],
+                    "Application Security": [
+                        "API Security Tester",
+                        "Authentication Checker",
+                        "Session Analyzer",
+                        "Input Validator",
+                        "Access Control Tester",
+                        "File Upload Scanner",
+                        "Business Logic Tester",
+                        "Error Handler Check",
+                        "Configuration Auditor",
+                        "Security Header Check"
+                    ],
+                    "Web Intelligence": [
+                        "OSINT Gatherer",
+                        "Domain Intel Tool",
+                        "Web Tech Detector",
+                        "Asset Discovery",
+                        "Content Security Check",
+                        "Framework Detector",
+                        "Cloud Config Scanner",
+                        "DNS Security Audit",
+                        "SSL Certificate Monitor",
+                        "Web Service Scanner"
+                    ]
+                }
+            },
+            cryptography: {
+                name: "Cryptography Tools",
+                groups: {
+                    "Encryption Tools": [
+                        "File Encryptor",
+                        "Text Encryption Tool",
+                        "Key Generator",
+                        "Hash Calculator",
+                        "Password Manager",
+                        "Certificate Generator",
+                        "Secure File Transfer",
+                        "Disk Encryption Tool",
+                        "Message Encryptor",
+                        "Key Exchange Tool"
+                    ],
+                    "Cryptanalysis": [
+                        "Hash Cracker",
+                        "Cipher Analyzer",
+                        "Key Strength Tester",
+                        "Entropy Analyzer",
+                        "Pattern Detector",
+                        "Frequency Analyzer",
+                        "Known-Plain Attack",
+                        "Rainbow Table Tool",
+                        "Password Strength Check",
+                        "Algorithm Identifier"
+                    ],
+                    "Blockchain Security": [
+                        "Smart Contract Auditor",
+                        "Wallet Security Check",
+                        "Transaction Analyzer",
+                        "Node Security Scanner",
+                        "Consensus Validator",
+                        "Chain Explorer",
+                        "Key Management Tool",
+                        "Mining Security Check",
+                        "DApp Security Scan",
+                        "Protocol Analyzer"
+                    ]
+                }
+            },
+            uniqueTools: {
+                name: "Unique swy4x Tools",
+                groups: {
+                    "Advanced Scanners": [
+                        {
+                            name: "AI Vulnerability Predictor",
+                            command: "ai_predict -t target.com",
+                            description: "ML-powered vulnerability prediction"
+                        },
+                        {
+                            name: "Zero-Day Hunter",
+                            command: "zday_scan target.com",
+                            description: "Find unknown vulnerabilities"
+                        }
+                    ],
+                    "Custom Tools": [
+                        {
+                            name: "Cloud Misconfiguration Scanner",
+                            command: "cloud_scan -p aws,azure,gcp",
+                            description: "Find cloud misconfigurations"
+                        },
+                        {
+                            name: "API Security Analyzer",
+                            command: "api_scan -e target.com/api",
+                            description: "Test API security"
+                        }
+                    ]
+                }
+            },
+            advancedScanner: {
+                name: "Advanced Web Scanner",
+                groups: {
+                    "Scanner Tools": [
+                        {
+                            name: "Advanced Web Scanner",
+                            description: "Complete web application security scanner",
+                            redirect: "/advanced-scanner.html"
+                        }
+                    ]
+                }
+            }
+        };
+
+        // Country coordinates data
+        const countryData = {
+            'United States': { x: 0.25, y: 0.35, code: 'US' },
+            'China': { x: 0.75, y: 0.35, code: 'CN' },
+            'Russia': { x: 0.65, y: 0.25, code: 'RU' },
+            'Brazil': { x: 0.35, y: 0.65, code: 'BR' },
+            'India': { x: 0.68, y: 0.45, code: 'IN' },
+            'United Kingdom': { x: 0.45, y: 0.25, code: 'GB' },
+            'Germany': { x: 0.48, y: 0.28, code: 'DE' },
+            'Japan': { x: 0.85, y: 0.35, code: 'JP' },
+            'Canada': { x: 0.22, y: 0.25, code: 'CA' },
+            'Australia': { x: 0.85, y: 0.70, code: 'AU' },
+            'South Korea': { x: 0.82, y: 0.35, code: 'KR' },
+            'Iran': { x: 0.60, y: 0.40, code: 'IR' },
+            'Israel': { x: 0.55, y: 0.40, code: 'IL' },
+            'France': { x: 0.46, y: 0.30, code: 'FR' },
+            'Singapore': { x: 0.75, y: 0.55, code: 'SG' }
+        };
+
+        class CyberAttackMap {
+            constructor() {
+                this.attackPoints = document.querySelector('.attack-points');
+                this.attackLines = document.querySelector('.attack-lines');
+                this.attackList = document.getElementById('attackList');
+                this.totalAttacks = 0;
+                this.attacksPerSecond = 0;
+                this.blockedAttacks = 0;
+                this.lastAttackTime = Date.now();
+                
+                this.attackTypes = [
+                    { name: 'DDoS Attack', color: '#ff0000', severity: 'Critical' },
+                    { name: 'Ransomware', color: '#ff00ff', severity: 'High' },
+                    { name: 'SQL Injection', color: '#00ff00', severity: 'Medium' },
+                    { name: 'Phishing', color: '#0000ff', severity: 'Medium' },
+                    { name: 'Zero-Day', color: '#ffff00', severity: 'Critical' }
+                ];
+
+                this.countryStats = {};
+                Object.keys(countryData).forEach(country => {
+                    this.countryStats[country] = {
+                        attacksSent: 0,
+                        attacksReceived: 0,
+                        lastAttackTime: 0
+                    };
+                });
+                
+                this.initializeCountryMarkers();
+            }
+
+            initializeCountryMarkers() {
+                Object.entries(countryData).forEach(([country, pos]) => {
+                    const marker = document.createElement('div');
+                    marker.className = 'country-marker';
+                    marker.style.left = `${pos.x * 100}%`;
+                    marker.style.top = `${pos.y * 100}%`;
+                    
+                    const label = document.createElement('div');
+                    label.className = 'country-label';
+                    label.textContent = country;
+                    
+                    marker.appendChild(label);
+                    
+                    marker.addEventListener('mouseenter', () => this.showCountryStats(marker, country));
+                    marker.addEventListener('mouseleave', () => {
+                        const tooltip = marker.querySelector('.country-tooltip');
+                        if (tooltip) tooltip.remove();
+                    });
+                    
+                    this.attackPoints.appendChild(marker);
+                });
+            }
+            
+            showCountryStats(marker, country) {
+                const stats = this.countryStats[country];
+                const tooltip = document.createElement('div');
+                tooltip.className = 'country-tooltip';
+                tooltip.innerHTML = `
+                    <div class="tooltip-header">${country}</div>
+                    <div class="tooltip-stat">Attacks Sent: ${stats.attacksSent}</div>
+                    <div class="tooltip-stat">Attacks Received: ${stats.attacksReceived}</div>
+                `;
+                marker.appendChild(tooltip);
+            }
+            
+            createAttack() {
+                const source = this.getRandomCountry();
+                const target = this.getRandomCountry();
+                if (source === target) return;
+
+                const attackType = this.getRandomAttackType();
+                
+                this.updateStats(source, target);
+                this.createAttackLine(source, target, attackType);
+                this.addAttackToList(source, target, attackType);
+            }
+            
+            updateStats(source, target) {
+                this.totalAttacks++;
+                const now = Date.now();
+                this.attacksPerSecond = 1 / ((now - this.lastAttackTime) / 1000);
+                this.lastAttackTime = now;
+
+                this.countryStats[source].attacksSent++;
+                this.countryStats[target].attacksReceived++;
+            }
+
+            createAttackLine(source, target, attackType) {
+                const line = document.createElement('div');
+                line.className = 'attack-beam';
+                
+                const sourcePos = countryData[source];
+                const targetPos = countryData[target];
+                
+                const dx = (targetPos.x - sourcePos.x) * 100;
+                const dy = (targetPos.y - sourcePos.y) * 100;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                
+                line.style.width = `${distance}%`;
+                line.style.left = `${sourcePos.x * 100}%`;
+                line.style.top = `${sourcePos.y * 100}%`;
+                line.style.transform = `rotate(${angle}deg)`;
+                line.style.background = `linear-gradient(90deg, ${attackType.color}, transparent)`;
+                
+                const info = document.createElement('div');
+                info.className = 'attack-info';
+                info.innerHTML = `
+                    <span class="attack-severity ${attackType.severity.toLowerCase()}">${attackType.severity}</span>
+                    ${attackType.name}
+                `;
+                line.appendChild(info);
+                
+                this.attackLines.appendChild(line);
+                
+                setTimeout(() => {
+                    line.remove();
+                    if (Math.random() < 0.3) {
+                        this.blockedAttacks++;
+                    }
+                }, 1500);
+            }
+            
+            addAttackToList(source, target, attackType) {
+                const listItem = document.createElement('div');
+                listItem.className = 'attack-list-item';
+                listItem.innerHTML = `
+                    <span class="attack-list-severity ${attackType.severity.toLowerCase()}">${attackType.severity}</span>
+                    <div class="attack-list-details">
+                        <div class="attack-list-type">${attackType.name}</div>
+                        <div class="attack-list-countries">${source} → ${target}</div>
+                        <div class="attack-list-time">Just now</div>
+                    </div>
+                `;
+                
+                this.attackList.insertBefore(listItem, this.attackList.firstChild);
+                
+                if (this.attackList.children.length > 10) {
+                    this.attackList.lastChild.remove();
+                }
+            }
+            
+            getRandomCountry() {
+                const countries = Object.keys(countryData);
+                return countries[Math.floor(Math.random() * countries.length)];
+            }
+
+            getRandomAttackType() {
+                return this.attackTypes[Math.floor(Math.random() * this.attackTypes.length)];
+            }
+        }
+
+        // Initialize tools
+        function initializeTools() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.innerHTML = '';
+            
+            Object.entries(toolData).forEach(([categoryId, category]) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'tool-category';
+                
+                const categoryHeader = document.createElement('div');
+                categoryHeader.className = 'category-header';
+                categoryHeader.innerHTML = `
+                    <span class="category-name">${category.name}</span>
+                    <span class="toggle-icon">▼</span>
+                `;
+                
+                const categoryContent = document.createElement('div');
+                categoryContent.className = 'category-content';
+                
+                Object.entries(category.groups).forEach(([groupName, tools]) => {
+                    const groupDiv = document.createElement('div');
+                    groupDiv.className = 'tool-group';
+                    
+                    const groupHeader = document.createElement('div');
+                    groupHeader.className = 'group-name';
+                    groupHeader.innerHTML = `
+                        <span class="group-icon">📁</span>
+                        <span>${groupName}</span>
+                    `;
+                    
+                    const toolList = document.createElement('div');
+                    toolList.className = 'tool-list';
+                    
+                    tools.forEach(tool => {
+                        const toolItem = createToolItem(tool);
+                        toolList.appendChild(toolItem);
+                    });
+                    
+                    groupDiv.appendChild(groupHeader);
+                    groupDiv.appendChild(toolList);
+                    categoryContent.appendChild(groupDiv);
+                    
+                    // Add click handler for group header
+                    groupHeader.onclick = () => {
+                        toolList.classList.toggle('active');
+                    };
+                });
+                
+                categoryDiv.appendChild(categoryHeader);
+                categoryDiv.appendChild(categoryContent);
+                sidebar.appendChild(categoryDiv);
+                
+                // Add click handler for category header
+                categoryHeader.onclick = () => {
+                    categoryContent.classList.toggle('active');
+                    const icon = categoryHeader.querySelector('.toggle-icon');
+                    icon.textContent = categoryContent.classList.contains('active') ? '▼' : '▲';
+                };
+            });
+        }
+
+        // Helper functions
+        function createToolItem(tool) {
+            if (typeof tool === 'string') {
+                tool = {
+                    name: tool,
+                    command: `${tool.toLowerCase().replace(/\s+/g, '_')}`,
+                    description: `Execute ${tool}`,
+                    redirect: `/tools/${tool.toLowerCase().replace(/\s+/g, '-')}`
+                };
+            }
+
+            const toolItem = document.createElement('div');
+            toolItem.className = 'tool-item';
+            
+            const toolIcon = document.createElement('div');
+            toolIcon.className = 'tool-icon';
+            toolIcon.textContent = getToolIcon(tool.name);
+            
+            const toolName = document.createElement('span');
+            toolName.className = 'tool-name';
+            toolName.textContent = tool.name;
+            
+            toolItem.appendChild(toolIcon);
+            toolItem.appendChild(toolName);
+            
+            toolItem.onclick = () => {
+                // Redirect to the tool's page
+                window.location.href = tool.redirect || `/tools/${tool.name.toLowerCase().replace(/\s+/g, '-')}`;
+            };
+            
+            return toolItem;
+        }
+
+        function getToolIcon(toolName) {
+            const iconMap = {
+                'URL': '🔍',
+                'Email': '📧',
+                'Domain': '🌐',
+                'SSL': '🔒',
+                'Phishing': '🎣',
+                'Social': '👥',
+                'Login': '🔑',
+                'Scam': '⚠️',
+                'Brand': '™️',
+                'Transaction': '💳',
+                'Payment': '💰',
+                'Identity': '🎭',
+                'Account': '👤',
+                'Behavioral': '📊',
+                'Financial': '💹',
+                'Chargeback': '↩️',
+                'KYC': '📝',
+                'Document': '📄',
+                'Money': '💵',
+                'Advanced': '🎯',
+                'Scanner': '🎯',
+                'Vulnerability': '🛡️',
+                'API': '🔌',
+                'Zero': '💥',
+                'Network': '🌐',
+                'Cloud': '☁️',
+                'Container': '📦',
+                'Exploit': '⚡',
+                'Post': '🔓'
+            };
+            
+            const match = Object.keys(iconMap).find(key => toolName.includes(key));
+            return match ? iconMap[match] : '🔒';
+        }
+
+        // Initialize everything when the document is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeTools();
+            window.cyberAttackMap = new CyberAttackMap();
+            
+            // Start attack simulation
+            setInterval(() => {
+                if (window.cyberAttackMap) {
+                    window.cyberAttackMap.createAttack();
+                    
+                    // Update stats
+                    document.getElementById('totalAttacks').textContent = window.cyberAttackMap.totalAttacks;
+                    document.getElementById('attacksPerSecond').textContent = window.cyberAttackMap.attacksPerSecond.toFixed(1);
+                    document.getElementById('blockedAttacks').textContent = window.cyberAttackMap.blockedAttacks;
+                }
+            }, 2000);
+        });
+
+        // Auth functions
+        function showLoginModal() {
+            // Show login modal
+            const modal = document.createElement('div');
+            modal.className = 'auth-modal';
+            modal.innerHTML = `
+                <div class="auth-content">
+                    <h2>Login</h2>
+                    <form id="loginForm">
+                        <input type="email" placeholder="Email" required>
+                        <input type="password" placeholder="Password" required>
+                        <button type="submit">Login</button>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function showSignupModal() {
+            // Show signup modal
+            const modal = document.createElement('div');
+            modal.className = 'auth-modal';
+            modal.innerHTML = `
+                <div class="auth-content">
+                    <h2>Sign Up</h2>
+                    <form id="signupForm">
+                        <input type="text" placeholder="Username" required>
+                        <input type="email" placeholder="Email" required>
+                        <input type="password" placeholder="Password" required>
+                        <input type="password" placeholder="Confirm Password" required>
+                        <button type="submit">Sign Up</button>
+                    </form>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+    </script>
+</body>
+</html> 

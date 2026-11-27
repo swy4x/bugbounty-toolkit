@@ -584,6 +584,42 @@
         body.light-theme{background:#f4f2fa;color:#211a35}body.light-theme header{background:rgba(255,255,255,.9)}body.light-theme .tool-card{background:#fff;border-color:#e4def1}body.light-theme .tool-header h3,body.light-theme .tool-category,body.light-theme .page-title{color:#211a35}body.light-theme .tool-description{color:#625b73}body.light-theme .terminal-box{background:#f7f5fb;border-color:#e6e0f0}body.light-theme .command{color:#5b3b91}body.light-theme .search-container{background:linear-gradient(115deg,#fff,#f0ebfb)}body.light-theme .search-container h1{color:#211a35}body.light-theme .search-container p{color:#625b73}body.light-theme .search-input,body.light-theme .command-search{background:#fff;color:#211a35;border-color:#d9d0eb}
         @media(max-width:700px){header{height:64px;padding:0 16px}.container{margin-top:88px}.search-container:before{position:static;display:inline-block;margin-bottom:14px}.search-form{flex-direction:column}.button{min-height:48px;width:100%}.tools-container,.tools-grid{grid-template-columns:1fr}.tool-card{padding:16px}.page-title span{font-size:.75rem}}
 
+    
+        /* swy4x workspace UI — unified responsive dashboard layer */
+        :root{--ui-bg:#080811;--ui-panel:#11111d;--ui-panel-2:#171626;--ui-line:rgba(167,139,250,.16);--ui-muted:#9693aa;--ui-text:#f3f1fb;--ui-violet:#a78bfa;--ui-mint:#7ee7bd}
+        body{background:radial-gradient(ellipse at 8% 0%,rgba(124,58,237,.17),transparent 34%),radial-gradient(ellipse at 92% 12%,rgba(45,212,191,.07),transparent 28%),var(--ui-bg);color:var(--ui-text)}
+        header{height:70px;border-bottom:1px solid var(--ui-line);background:rgba(8,8,17,.9);backdrop-filter:blur(18px)}
+        .logo{display:flex;align-items:center;gap:10px;font-size:.88rem;letter-spacing:.15em}.logo i{font-size:1.25rem;color:var(--ui-violet)}.nav-controls{display:flex;align-items:center;gap:10px}
+        .theme-toggle{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#171626;border:1px solid var(--ui-line);color:#d8ccff;transition:.2s}.theme-toggle:hover{border-color:var(--ui-violet);transform:translateY(-1px)}
+        .container{max-width:1500px;margin:100px auto 64px;padding:0 clamp(16px,3.2vw,48px)}
+        .page-title{margin-bottom:16px;font-size:clamp(1.45rem,2.4vw,2rem);letter-spacing:-.05em}.page-title span{display:inline-block;margin:0 0 0 10px;font-size:.72rem;letter-spacing:.04em;color:#858198}
+        .workspace-overview{position:relative;display:flex;align-items:center;justify-content:space-between;gap:30px;min-height:220px;margin:0 0 16px;padding:clamp(24px,4vw,42px);overflow:hidden;border:1px solid rgba(167,139,250,.23);border-radius:22px;background:linear-gradient(115deg,rgba(34,27,57,.97),rgba(17,19,31,.98) 68%,rgba(15,29,34,.92));box-shadow:0 22px 60px rgba(0,0,0,.22)}
+        .workspace-overview:after{content:"";position:absolute;width:300px;height:300px;right:13%;top:-190px;border:1px solid rgba(167,139,250,.15);border-radius:50%;box-shadow:0 0 0 35px rgba(167,139,250,.025),0 0 0 70px rgba(167,139,250,.02);pointer-events:none}
+        .overview-copy{max-width:700px;position:relative;z-index:1}.eyebrow{display:flex;align-items:center;gap:9px;color:#c4b5fd;font-size:.65rem;letter-spacing:.16em;font-weight:700}.live-dot{width:7px;height:7px;border-radius:50%;background:var(--ui-mint);box-shadow:0 0 12px rgba(126,231,189,.7)}
+        .overview-copy h2{margin:14px 0 10px;color:#fff;font-size:clamp(1.8rem,4vw,3rem);line-height:1.08;letter-spacing:-.06em}.overview-copy h2 span{color:#bda8ff}.overview-copy p{max-width:620px;color:#aaa6bb;font-size:.85rem;line-height:1.8}
+        .overview-side{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:9px;min-width:190px;text-align:center;color:#c4b5fd;font-size:.62rem;letter-spacing:.13em}.overview-mark{display:grid;place-items:center;width:84px;height:84px;border:1px solid rgba(167,139,250,.32);border-radius:24px;background:rgba(167,139,250,.08);font-size:2rem;box-shadow:inset 0 0 28px rgba(167,139,250,.08),0 12px 30px rgba(0,0,0,.2)}.overview-side small{max-width:200px;color:#8f8a9f;font-size:.65rem;letter-spacing:0;line-height:1.5}
+        .metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 24px}.metric-card{display:flex;align-items:center;gap:13px;min-width:0;padding:17px;border:1px solid var(--ui-line);border-radius:15px;background:linear-gradient(145deg,rgba(22,21,36,.95),rgba(14,14,24,.98));box-shadow:0 8px 24px rgba(0,0,0,.12)}.metric-icon{display:grid;place-items:center;flex:0 0 39px;height:39px;border-radius:12px;background:rgba(167,139,250,.12);color:#c4b5fd}.metric-icon.safe{background:rgba(126,231,189,.1);color:var(--ui-mint)}.metric-card strong{display:block;color:#f5f2ff;font-size:1rem;line-height:1.3}.metric-card small{display:block;margin-top:3px;color:#918da3;font-size:.68rem}
+        .search-container{margin:0 0 14px;padding:clamp(20px,3vw,30px);border-radius:18px;background:linear-gradient(120deg,rgba(24,22,40,.98),rgba(15,17,28,.98));border-color:rgba(167,139,250,.2);box-shadow:0 12px 36px rgba(0,0,0,.16)}
+        .search-container:before{top:24px;right:26px}.search-container h1{font-size:1.08rem;letter-spacing:-.02em}.search-container p{margin-top:10px}.search-form{max-width:100%;margin-top:15px}.search-input{min-height:54px}.button{min-height:54px;white-space:nowrap}
+        .scope-note{margin:0 0 16px}.ui-toolbar{margin:0 0 12px;padding:12px;border:1px solid var(--ui-line);border-radius:14px;background:rgba(17,17,29,.86)}.command-search{max-width:none;min-height:43px;background:#0b0b14}.results-count{white-space:nowrap;padding:0 5px}
+        .category-nav{gap:7px;padding:4px 0 18px;margin-bottom:0}.category-nav a{padding:8px 12px;background:#12111f;border-color:var(--ui-line);font-size:.69rem;transition:.18s}.category-nav a:hover{transform:translateY(-1px)}
+        .tool-category{margin:27px 0 13px;padding:0 0 12px;font-size:1rem}.tool-category:before{content:"";width:3px;height:18px;border-radius:5px;background:linear-gradient(#c4b5fd,#7c3aed)}
+        .tools-container,.tools-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:13px}
+        .tool-card{padding:18px;border-radius:15px;background:linear-gradient(145deg,rgba(20,19,33,.98),rgba(13,13,22,.99));border-color:rgba(167,139,250,.13);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+        .tool-card:hover{transform:translateY(-2px);border-color:rgba(167,139,250,.4);box-shadow:0 14px 30px rgba(0,0,0,.2)}
+        .tool-header h3{font-size:.88rem}.tool-description{min-height:2.3em}.terminal-box{max-height:190px}.command{font-size:.73rem}
+        .copy-btn{flex:0 0 34px}.notification{max-width:calc(100vw - 32px)}.scroll-to-top{width:43px;height:43px}
+        .empty-state{margin:10px 0 24px}
+        body.light-theme{--ui-bg:#f5f3fa;--ui-panel:#fff;--ui-text:#241d35;background:#f5f3fa;color:#241d35}
+        body.light-theme .workspace-overview{background:linear-gradient(115deg,#eee8fb,#f8f7fc 70%,#eaf6f2);border-color:#ddd3f2}
+        body.light-theme .overview-copy h2,body.light-theme .metric-card strong{color:#241d35}body.light-theme .overview-copy p,body.light-theme .overview-side small{color:#696279}
+        body.light-theme .metric-card,body.light-theme .ui-toolbar{background:#fff;border-color:#e4def1}body.light-theme .metric-card small{color:#777087}
+        body.light-theme .category-nav a{background:#fff;color:#51476b;border-color:#e4def1}body.light-theme .search-container{border-color:#ded5ef}
+        body.light-theme .scope-note{background:#effaf4;color:#426653}body.light-theme .command-search{background:#fff;color:#241d35}
+        @media(max-width:900px){.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.overview-side{min-width:140px}.overview-mark{width:70px;height:70px}}
+        @media(max-width:620px){header{height:64px}.container{margin-top:84px}.page-title span{display:block;margin:5px 0 0}.workspace-overview{min-height:0;padding:22px;gap:12px}.overview-side{display:none}.overview-copy h2{font-size:2rem}.overview-copy p{font-size:.78rem}.metric-grid{gap:8px}.metric-card{padding:12px;gap:9px}.metric-icon{flex-basis:33px;height:33px}.metric-card strong{font-size:.86rem}.metric-card small{font-size:.62rem}.search-container:before{position:static;display:inline-block;margin-bottom:12px}.search-form{flex-direction:column}.button{width:100%;min-height:50px}.tools-container,.tools-grid{grid-template-columns:1fr}.tool-card{padding:15px}.ui-toolbar{align-items:stretch}.results-count{padding:0 2px}.tool-description{min-height:0}}
+        @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+
     </style>
 </head>
 <body>
@@ -601,6 +637,25 @@
 
     <div class="container">
         <h1 class="page-title">Recon workspace<span> / authorized security testing</span></h1>
+
+        <section class="workspace-overview" aria-label="Workspace overview">
+            <div class="overview-copy">
+                <span class="eyebrow"><span class="live-dot"></span> SECURITY RESEARCH WORKSPACE</span>
+                <h2>Map the surface.<br><span>Find the signal.</span></h2>
+                <p>A focused command library for authorized reconnaissance and security testing. Configure your target, review each command, then run it in your own environment.</p>
+            </div>
+            <div class="overview-side">
+                <div class="overview-mark"><i class="fas fa-crosshairs"></i></div>
+                <span>RECON / ANALYZE / REPORT</span>
+                <small>Local command templates · No scans are run by this page</small>
+            </div>
+        </section>
+        <section class="metric-grid" aria-label="Toolkit contents">
+            <article class="metric-card"><span class="metric-icon"><i class="fas fa-layer-group"></i></span><div><strong id="metricCommands">—</strong><small>Command templates</small></div></article>
+            <article class="metric-card"><span class="metric-icon"><i class="fas fa-folder-tree"></i></span><div><strong id="metricCategories">—</strong><small>Workflow categories</small></div></article>
+            <article class="metric-card"><span class="metric-icon"><i class="fas fa-copy"></i></span><div><strong>Clipboard</strong><small>Copy-ready commands</small></div></article>
+            <article class="metric-card"><span class="metric-icon safe"><i class="fas fa-shield-halved"></i></span><div><strong>Scope first</strong><small>Authorized targets only</small></div></article>
+        </section>
 
         <div class="search-container">
     
@@ -2249,137 +2304,154 @@
     </div>
 
     <script>
+        (() => {
+            const commandSearch = document.getElementById('commandSearch');
+            const resultsCount = document.getElementById('resultsCount');
+            const allCards = [...document.querySelectorAll('.tool-card')];
+            const categories = [...document.querySelectorAll('.tool-category')];
+            const generatorPanel = document.querySelector('.search-container');
+            const scopeNote = document.querySelector('.scope-note');
+            const toolbar = document.querySelector('.ui-toolbar');
+            const domainForm = document.getElementById('domainForm');
+            const domainInput = document.getElementById('domainInput');
+            const notification = document.getElementById('notification');
+            const scrollToTop = document.getElementById('scrollToTop');
+            const themeToggle = document.querySelector('.theme-toggle');
+            let toastTimer;
 
-        // UI helpers: local command search and category navigation.
-        const commandSearch = document.getElementById('commandSearch');
-        const resultsCount = document.getElementById('resultsCount');
-        const allCards = [...document.querySelectorAll('.tool-card')];
-        const categories = [...document.querySelectorAll('.tool-category')];
-        categories.forEach((heading, index) => {
-            const id = 'category-' + (index + 1);
-            heading.id = id;
-            const next = heading.nextElementSibling;
-            if (next && (next.classList.contains('tools-container') || next.classList.contains('tools-grid'))) next.dataset.category = heading.textContent.trim();
-        });
-        function filterCommands() {
-            const query = (commandSearch?.value || '').trim().toLowerCase();
-            let visible = 0;
-            allCards.forEach(card => {
-                const match = !query || card.textContent.toLowerCase().includes(query);
-                card.style.display = match ? '' : 'none';
-                if (match) visible++;
-            });
-            categories.forEach(heading => {
+            // Keep the target generator, safety note, search and category navigation together above the library.
+            const firstCategory = categories[0];
+            if (generatorPanel && firstCategory) firstCategory.before(generatorPanel);
+            if (generatorPanel && scopeNote) generatorPanel.after(scopeNote);
+            if (scopeNote && toolbar) scopeNote.after(toolbar);
+
+            categories.forEach((heading, index) => {
+                heading.id = 'category-' + (index + 1);
                 const group = heading.nextElementSibling;
-                const hasCards = group && [...group.querySelectorAll('.tool-card')].some(card => card.style.display !== 'none');
-                heading.style.display = hasCards ? '' : 'none';
+                if (group && (group.classList.contains('tools-container') || group.classList.contains('tools-grid'))) {
+                    group.dataset.category = heading.textContent.trim();
+                }
             });
-            if (resultsCount) resultsCount.textContent = `${visible} of ${allCards.length} commands`;
-        }
-        commandSearch?.addEventListener('input', filterCommands);
-        filterCommands();
-        // Move the generator to the very top of the workspace before any command groups.
-        const generatorPanel = document.querySelector('.search-container');
-        const firstCategory = document.querySelector('.tool-category');
-        if (generatorPanel && firstCategory && generatorPanel.nextElementSibling !== firstCategory) {
-            firstCategory.parentNode.insertBefore(generatorPanel, firstCategory);
-        }
-        const scopeNote = document.querySelector('.scope-note');
-        const toolbar = document.querySelector('.ui-toolbar');
-        if (generatorPanel && scopeNote) generatorPanel.after(scopeNote);
-        if (scopeNote && toolbar) scopeNote.after(toolbar);
-        if (toolbar && categories.length) {
+
             const nav = document.createElement('nav');
             nav.className = 'category-nav';
             nav.setAttribute('aria-label', 'Command categories');
-            categories.forEach((heading, index) => {
+            categories.forEach(heading => {
                 const link = document.createElement('a');
                 link.href = '#' + heading.id;
                 link.textContent = heading.textContent.replace(/^[^\w]*/, '').trim();
                 nav.appendChild(link);
             });
-            toolbar.after(nav);
-        }
+            if (toolbar) toolbar.after(nav);
 
-        // Domain validation and form handling
-        const domainForm = document.getElementById('domainForm');
-        const domainInput = document.getElementById('domainInput');
-        const notification = document.getElementById('notification');
-        const scrollToTop = document.getElementById('scrollToTop');
+            const metricCommands = document.getElementById('metricCommands');
+            const metricCategories = document.getElementById('metricCategories');
+            if (metricCommands) metricCommands.textContent = allCards.length.toLocaleString();
+            if (metricCategories) metricCategories.textContent = categories.length.toLocaleString();
 
-        domainForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const domain = domainInput.value.trim();
-            if (!isValidDomain(domain)) {
-                alert('Please enter a valid domain');
-                return;
+            const emptyState = document.createElement('div');
+            emptyState.className = 'empty-state';
+            emptyState.textContent = 'No matching commands. Try another search term.';
+            if (nav) nav.after(emptyState);
+
+            function filterCommands() {
+                const query = (commandSearch?.value || '').trim().toLowerCase();
+                let visible = 0;
+                allCards.forEach(card => {
+                    const match = !query || card.textContent.toLowerCase().includes(query);
+                    card.hidden = !match;
+                    if (match) visible++;
+                });
+                categories.forEach(heading => {
+                    const group = heading.nextElementSibling;
+                    const hasCards = group && [...group.querySelectorAll('.tool-card')].some(card => !card.hidden);
+                    heading.hidden = !hasCards;
+                    if (group) group.hidden = !hasCards;
+                });
+                if (resultsCount) resultsCount.textContent = visible + ' of ' + allCards.length + ' command templates';
+                emptyState.style.display = visible ? 'none' : 'block';
             }
-            // Update all commands with the domain
-            updateCommands(domain);
-        });
+            commandSearch?.addEventListener('input', filterCommands);
+            filterCommands();
 
-        function isValidDomain(domain) {
-            const pattern = /^(?=.{1,253}$)(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/;
-            return pattern.test(domain);
-        }
-
-        function updateCommands(domain) {
-            document.querySelectorAll('.command').forEach(cmd => {
-                const originalCommand = cmd.getAttribute('data-original') || cmd.textContent;
-                if (!cmd.getAttribute('data-original')) {
-                    cmd.setAttribute('data-original', originalCommand);
+            function isValidDomain(value) {
+                const domain = value.trim().replace(/\.$/, '');
+                if (domain.length > 253 || domain.includes('://') || domain.includes('/') || domain.includes(':')) return false;
+                return /^(?=.{1,253}$)(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,63}$/.test(domain);
+            }
+            function updateCommands(domain) {
+                document.querySelectorAll('.command').forEach(command => {
+                    if (!command.dataset.original) command.dataset.original = command.textContent;
+                    command.textContent = command.dataset.original.replace(/\{domain\}/g, domain);
+                });
+            }
+            domainForm?.addEventListener('submit', event => {
+                event.preventDefault();
+                const domain = domainInput?.value.trim().replace(/\.$/, '');
+                if (!domain || !isValidDomain(domain)) {
+                    domainInput?.setCustomValidity('Enter a valid domain, such as example.com');
+                    domainInput?.reportValidity();
+                    return;
                 }
-                cmd.textContent = originalCommand.replace(/{domain}/g, domain);
+                domainInput.setCustomValidity('');
+                updateCommands(domain);
+                showNotification('Target applied to command templates');
             });
-        }
+            domainInput?.addEventListener('input', () => domainInput.setCustomValidity(''));
 
-        // Copy functionality
-        function copyCommand(id) {
-            const commandElement = document.getElementById(id);
-            const command = commandElement.textContent;
-            
-            navigator.clipboard.writeText(command).then(() => {
-                showNotification();
-            });
-        }
-
-        function showNotification() {
-            notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-
-        // Scroll to top functionality
-        window.addEventListener('scroll', () => {
-            if (window.pageYOffset > 300) {
-                scrollToTop.classList.add('visible');
-            } else {
-                scrollToTop.classList.remove('visible');
+            function showNotification(message) {
+                if (!notification) return;
+                const label = notification.querySelector('span');
+                if (label) label.textContent = message;
+                notification.style.display = 'block';
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => notification.style.display = 'none', 2400);
             }
-        });
+            window.copyCommand = async function(id) {
+                const commandElement = document.getElementById(id);
+                if (!commandElement) return;
+                const command = commandElement.textContent.trim();
+                try {
+                    await navigator.clipboard.writeText(command);
+                    showNotification('Command copied to clipboard');
+                } catch (error) {
+                    const temporary = document.createElement('textarea');
+                    temporary.value = command;
+                    temporary.setAttribute('readonly', '');
+                    temporary.style.position = 'fixed';
+                    temporary.style.opacity = '0';
+                    document.body.appendChild(temporary);
+                    temporary.select();
+                    const copied = document.execCommand('copy');
+                    temporary.remove();
+                    showNotification(copied ? 'Command copied to clipboard' : 'Clipboard access unavailable');
+                }
+            };
 
-        scrollToTop.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
+            window.addEventListener('scroll', () => {
+                if (scrollToTop) scrollToTop.classList.toggle('visible', window.scrollY > 350);
+            }, {passive:true});
+            scrollToTop?.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+
+            const body = document.body;
+            const savedTheme = (() => { try { return localStorage.getItem('swy4x-theme'); } catch (_) { return null; } })();
+            if (savedTheme === 'light') body.classList.add('light-theme');
+            function syncThemeIcon() {
+                const icon = themeToggle?.querySelector('i');
+                if (!icon) return;
+                icon.classList.toggle('bx-sun', body.classList.contains('light-theme'));
+                icon.classList.toggle('bx-moon', !body.classList.contains('light-theme'));
+            }
+            syncThemeIcon();
+            themeToggle?.addEventListener('click', () => {
+                body.classList.toggle('light-theme');
+                try { localStorage.setItem('swy4x-theme', body.classList.contains('light-theme') ? 'light' : 'dark'); } catch (_) {}
+                syncThemeIcon();
             });
-        });
-
-        // Theme toggle
-        const themeToggle = document.querySelector('.theme-toggle');
-        const body = document.body;
-
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('light-theme');
-            themeToggle.querySelector('i').classList.toggle('bx-moon');
-            themeToggle.querySelector('i').classList.toggle('bx-sun');
-        });
-
-        // Initialize commands with placeholder
-        document.querySelectorAll('.command').forEach(cmd => {
-            cmd.setAttribute('data-original', cmd.textContent);
-        });
+            document.querySelectorAll('.command').forEach(command => {
+                if (!command.dataset.original) command.dataset.original = command.textContent;
+            });
+        })();
     </script>
 </body>
 </html> 
